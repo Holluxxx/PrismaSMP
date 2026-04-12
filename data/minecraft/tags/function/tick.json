@@ -1,5 +1,6 @@
 {
     "values": [
-        "prisma:artifacts"
+        "prisma:artifacts",
+        "minecraft:load"
     ]
 }
