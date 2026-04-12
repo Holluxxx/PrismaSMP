@@ -14,9 +14,9 @@
     "result": {
         "id": "minecraft:phantom_membrane",
         "components": {
-            "minecraft:custom_name": {"text":"✞ Angle Artifact ✞","italic":false,"color":"white","bold":true},
+            "minecraft:custom_name": {"text":"✞ Angel Artifact ✞","italic":false,"color":"white","bold":true},
             "minecraft:lore": [
-                {"text":"The golden angle will never let you fall again when held!","italic":false,"color":"gold","bold":true},
+                {"text":"The golden angel will never let you fall again when held!","italic":false,"color":"gold","bold":true},
                 {"text":"Forged by angels over a million years ago to serve the purpose of saving lives!","italic":false,"color":"gray","bold":false}
             ],
             "minecraft:rarity": "epic",
