@@ -2,22 +2,24 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "CBC",
-        "BAB",
-        "CBC"
+        "ABD",
+        "BCB",
+        "DBA"
     ],
     "key": {
         "A": "minecraft:heavy_core",
         "B": "minecraft:netherite_ingot",
         "C": "minecraft:nether_star"
+        "D": "minecraft:wither_rose"
     },
     "result": {
         "id": "minecraft:fermented_spider_eye",
         "components": {
-            "minecraft:custom_name": {"text":"☬ Immense Strength Artifact ☬","italic":false,"color":"dark_red","bold":true},
+            "minecraft:custom_name": {"text":"☬ Tier II Strength Artifact ☬","italic":false,"color":"dark_red","bold":true},
             "minecraft:lore": [
                 {"text":"Become insanely stronger when held!","italic":false,"color":"gold","bold":true},
-                {"text":"Created by the hatred of fallen kingdoms! An artifact so intense it makes the user gain strength instantly!","italic":false,"color":"yellow","bold":false}
+                {"text":"Created by the hatred of fallen kingdoms! An artifact so intense","italic":false,"color":"yellow","bold":false}
+                {"text":"it makes the user gain strength instantly!","italic":false,"color":"yellow","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
