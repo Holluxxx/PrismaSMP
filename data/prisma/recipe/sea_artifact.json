@@ -14,7 +14,7 @@
     "result": {
         "id": "minecraft:prismarine_shard",
         "components": {
-            "minecraft:custom_name": {"text":"✱ Sea Artifact ✱","italic":false,"color":"blue","bold":true},
+            "minecraft:custom_name": {"text":"✱ Tier II Water Artifact ✱","italic":false,"color":"blue","bold":true},
             "minecraft:lore": [
                 {"text":"You shall grow gills when held!","italic":false,"color":"gold","bold":true},
                 {"text":"poseidon came and conjured a artifact allowing humans to become one with the sea.","italic":false,"color":"dark_blue","bold":false}
