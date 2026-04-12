@@ -1,1 +1,13 @@
-execute as @a run recipe give @a *
+execute as @a run recipe give @a prisma:angel_artifact
+execute as @a run recipe give @a prisma:durability_artifact
+execute as @a run recipe give @a prisma:fire_artifact
+execute as @a run recipe give @a prisma:immense_strength
+execute as @a run recipe give @a prisma:invisible_artifact
+execute as @a run recipe give @a prisma:love_artifact
+execute as @a run recipe give @a prisma:mining_artifact
+execute as @a run recipe give @a prisma:sacrificial_artifact
+execute as @a run recipe give @a prisma:sea_artifact
+execute as @a run recipe give @a prisma:stealth_artifact
+execute as @a run recipe give @a prisma:strength_artifact
+execute as @a run recipe give @a prisma:water_artifact
+execute as @a run recipe give @a prisma:wind_artifact
