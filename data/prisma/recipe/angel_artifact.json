@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:elytra",
+        "B": "minecraft:ghast_tear",
+        "C": "minecraft:iron_block"
+    },
+    "result": {
+        "id": "minecraft:phantom_membrane",
+        "components": {
+            "minecraft:custom_name": {"text":"✞ Angle Artifact ✞","italic":false,"color":"white","bold":true},
+            "minecraft:lore": [
+                {"text":"The golden angle will never let you fall again when held!","italic":false,"color":"gold","bold":true},
+                {"text":"Forged by angels over a million years ago to serve the purpose of saving lives!","italic":false,"color":"gray","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "angel_artifact"
+                ]
+            }
+        }
+    }
+}

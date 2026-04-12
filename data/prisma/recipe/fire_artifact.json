@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "DBD",
+        "CAC",
+        "DBD"
+    ],
+    "key": {
+        "A": "minecraft:fire_charge",
+        "B": "minecraft:netherite_ingot",
+        "C": "minecraft:gold_block",
+        "D": "minecraft:lava_bucket"
+    },
+    "result": {
+        "id": "minecraft:honeycomb",
+        "components": {
+            "minecraft:custom_name": {"text":"☼ Fire Artifact ☼","italic":false,"color":"red","bold":true},
+            "minecraft:lore": [
+                {"text":"Become invincible to fire when held!","italic":false,"color":"gold","bold":true},
+                {"text":"An artifact forged from compressed lava.","italic":false,"color":"dark_red","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "fire_artifact"
+                ]
+            }
+        }
+    }
+}

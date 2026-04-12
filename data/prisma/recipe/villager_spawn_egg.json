@@ -1,0 +1,28 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "abd",
+        "bcb",
+        "ebf"
+    ],
+    "key": {
+        "a": "minecraft:bread",
+        "b": "minecraft:emerald_block",
+        "c": "minecraft:egg",
+        "d": "minecraft:potato",
+        "e": "minecraft:carrot",
+        "f": "minecraft:beetroot"
+    },
+    "result": {
+        "id": "minecraft:villager_spawn_egg",
+        "components": {
+            "minecraft:custom_name": {"text":"Villager Artifact","italic":false,"color":"green","bold":true},
+            "minecraft:lore": [
+                {"text":"Right click to use!","italic":false,"color":"white"}
+            ],
+            "minecraft:rarity": "epic"
+        },
+        "count": 1
+    }
+}

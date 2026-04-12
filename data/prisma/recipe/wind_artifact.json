@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:diamond_boots",
+        "B": "minecraft:wind_charge",
+        "C": "minecraft:breeze_rod"
+    },
+    "result": {
+        "id": "minecraft:breeze_rod",
+        "components": {
+            "minecraft:custom_name": {"text":"⸎ Wind Artifact ⸎","italic":false,"color":"green","bold":true},
+            "minecraft:lore": [
+                {"text":"Let the wind carry your movements!","italic":false,"color":"gold","bold":true},
+                {"text":"The gusts of the valley will assist you in your travels.","italic":false,"color":"white","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "wind_artifact"
+                ]
+            }
+        }
+    }
+}

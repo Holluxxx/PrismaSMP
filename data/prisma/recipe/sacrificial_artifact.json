@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:dragon_head",
+        "B": "minecraft:netherite_ingot",
+        "C": "minecraft:nether_star"
+    },
+    "result": {
+        "id": "minecraft:firework_star",
+        "components": {
+            "minecraft:custom_name": {"text":"☠ Sacrificial Artifact ☠","italic":false,"color":"dark_gray","bold":true},
+            "minecraft:lore": [
+                {"text":"May the reaper bless your soul!","italic":false,"color":"red","bold":true},
+                {"text":"The god of death sealed all of his souls in one HORRIFYING object...","italic":false,"color":"dark_red","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "death_artifact"
+                ]
+            }
+        }
+    }
+}

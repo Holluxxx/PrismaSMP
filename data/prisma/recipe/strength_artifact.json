@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:heavy_core",
+        "B": "minecraft:netherite_ingot",
+        "C": "minecraft:fire_charge"
+    },
+    "result": {
+        "id": "minecraft:red_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"✴ Strength Artifact ✴","italic":false,"color":"red","bold":true},
+            "minecraft:lore": [
+                {"text":"Become invincible to fire when held!","italic":false,"color":"gold","bold":true},
+                {"text":"Created by the hatred of fallen villages! An artifact so intense it makes the user gain strength rapidly!","italic":false,"color":"dark_red","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "strength_artifact"
+                ]
+            }
+        }
+    }
+}

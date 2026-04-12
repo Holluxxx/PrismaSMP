@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:redstone_ore",
+        "B": "minecraft:diamond_block",
+        "C": "minecraft:red_dye"
+    },
+    "result": {
+        "id": "minecraft:pink_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"♥ Love Artifact ♥","italic":false,"color":"light_purple","bold":true},
+            "minecraft:lore": [
+                {"text":"Cupid may watch over you!","italic":false,"color":"red","bold":true},
+                {"text":"This artifact is know to give the wielder a longer life","italic":false,"color":"light_purple","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "love_artifact"
+                ]
+            }
+        }
+    }
+}
