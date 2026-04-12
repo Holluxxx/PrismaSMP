@@ -2,14 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "CBC",
-        "BAB",
-        "CBC"
+        "DBD",
+        "CAC",
+        "DBD"
     ],
     "key": {
         "A": "minecraft:heart_of_the_sea",
-        "B": "minecraft:prismarine",
-        "C": "minecraft:sea_lantern"
+        "B": "minecraft:tide_armor_trim_smithing_template",
+        "C": "minecraft:coast_armor_trim_smithing_template",
+        "D": "minecraft:sea_lantern"
     },
     "result": {
         "id": "minecraft:prismarine_shard",
