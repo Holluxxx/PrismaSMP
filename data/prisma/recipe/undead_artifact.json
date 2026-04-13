@@ -2,15 +2,15 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "CBC",
-        "BAB",
-        "CBC"
+        "DBD",
+        "CAC",
+        "DBD"
     ],
     "key": {
-        "A": "minecraft:dragon_head",
-        "B": "minecraft:netherite_ingot",
-        "B": "minecraft:netherite_ingot",
-        "C": "minecraft:nether_star"
+        "A": "minecraft:wither_skull",
+        "B": "minecraft:ominous_trail_key",
+        "C": "minecraft:netherite_ingot",
+        "D": "minecraft:echo_shard"
     },
     "result": {
         "id": "minecraft:bone",
