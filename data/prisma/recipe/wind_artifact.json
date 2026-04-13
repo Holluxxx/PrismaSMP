@@ -7,9 +7,9 @@
         "CBC"
     ],
     "key": {
-        "A": "minecraft:diamond_boots",
+        "A": "minecraft:elytra",
         "B": "minecraft:wind_charge",
-        "C": "minecraft:breeze_rod"
+        "C": "minecraft:dried_ghast"
     },
     "result": {
         "id": "minecraft:breeze_rod",
