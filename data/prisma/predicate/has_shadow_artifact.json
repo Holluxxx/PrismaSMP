@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["invisibility_artifact"]
+                        "strings": ["shadow_artifact"]
                     }
                 }
             }
