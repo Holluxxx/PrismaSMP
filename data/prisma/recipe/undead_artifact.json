@@ -7,7 +7,7 @@
         "DBD"
     ],
     "key": {
-        "A": "minecraft:wither_skull",
+        "A": "minecraft:wither_skeleton_skull",
         "B": "minecraft:ominous_trail_key",
         "C": "minecraft:netherite_ingot",
         "D": "minecraft:echo_shard"
