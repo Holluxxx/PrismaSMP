@@ -9,7 +9,7 @@
     "key": {
         "A": "minecraft:heavy_core",
         "B": "minecraft:netherite_ingot",
-        "C": "minecraft:nether_star"
+        "C": "minecraft:nether_star",
         "D": "minecraft:wither_rose"
     },
     "result": {
