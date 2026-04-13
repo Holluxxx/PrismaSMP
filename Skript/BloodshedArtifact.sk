@@ -1,1 +1,68 @@
+# =====================
+# PrismaSMP - Bloodshed Artifact Roar
+# =====================
 
+options:
+    roar_cooldown: 10  # seconds before roar can be used again
+    roar_range: 8      # blocks radius
+    double_tap_window: 0.4  # seconds between crouches to count as double tap
+    effect_duration: 8 # seconds fear lasts
+
+# Track crouch timestamps and cooldowns per player
+{prisma.roar.cooldown::%player%} = 0 by default
+{prisma.roar.lastsneakt::%player%} = 0 by default
+
+on sneak toggle:
+    # Must be holding Bloodshed Artifact in offhand
+    if player's offhand item's custom model data strings contain "immense_strength_artifact":
+        # Only care about when they START crouching
+        if player is sneaking:
+            # Check if cooldown is still active
+            if {prisma.roar.cooldown::%player%} is set:
+                stop
+
+            set {_now} to now
+            set {_last} to {prisma.roar.lastsneakt::%player%}
+
+            # If last crouch was within the double tap window
+            if difference between {_now} and {_last} <= {@double_tap_window} seconds:
+                # TRIGGER THE ROAR
+                execute roar for player
+                delete {prisma.roar.lastsneakt::%player%}
+            else:
+                # First crouch — just record the time
+                set {prisma.roar.lastsneakt::%player%} to {_now}
+
+function execute roar(p: player):
+    # Self buff — rage fuels the roar
+    apply strength 2 to {_p} for 3 seconds without particles
+    apply speed 1 to {_p} for 3 seconds without particles
+
+    # Set cooldown
+    set {prisma.roar.cooldown::%{_p}%} to true
+    wait {@roar_cooldown} seconds
+    delete {prisma.roar.cooldown::%{_p}%}
+
+local function execute roar(p: player):
+    # Visual + sound on caster
+    play sound "entity.warden.roar" with volume 2 and pitch 0.8 at {_p}'s location for all players in radius 16 around {_p}
+    spawn 200 crimson spore particles at {_p}'s location with offset 0.5, 1, 0.5
+    spawn 1 explosion emitter particle at {_p}'s location
+
+    # Actionbar warning for caster
+    send actionbar "<bold><dark_red>☬ BLOODSHED ROAR</dark_red></bold>" to {_p}
+
+    # Apply fear to all nearby players (excluding caster)
+    loop players in radius {@roar_range} around {_p}:
+        if loop-player is not {_p}:
+            apply nausea 1 to loop-player for {@effect_duration} seconds
+            apply slowness 2 to loop-player for {@effect_duration} seconds
+            apply weakness 1 to loop-player for {@effect_duration} seconds
+            apply darkness 0 to loop-player for {@effect_duration} seconds
+
+            # Knockback — launch them away from caster
+            set {_dir} to direction from {_p}'s location to loop-player's location
+            push loop-player in {_dir} direction with force 1.5
+
+            # Warn nearby players with actionbar
+            send actionbar "<bold><red>☬ BLOODSHED ROAR INCOMING — RUN!</red></bold>" to loop-player
