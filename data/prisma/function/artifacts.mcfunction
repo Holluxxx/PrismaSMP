@@ -13,7 +13,9 @@ execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:j
 execute as @a[predicate=prisma:has_sea_artifact] run effect give @s minecraft:water_breathing 1 0 false
 execute as @a[predicate=prisma:has_sea_artifact] run effect give @s minecraft:dolphins_grace 2 1 false
 
-execute as @a[predicate=prisma:has_fire_artifact] run effect give @s minecraft:fire_resistance 1 0 false
+execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:fire_resistance 1 0 false
+execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:haste 1 0 false
+execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:strength 1 0 false
 
 execute as @a[predicate=prisma:has_terra_artifact] run effect give @s minecraft:resistance 1 0 false
 execute as @a[predicate=prisma:has_terra_artifact] run attribute @s minecraft:max_health base set 26
