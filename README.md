@@ -59,7 +59,6 @@ PrismaSMP is a survival-friendly datapack that introduces **craftable Artifacts*
 ## 👥 Credits
 
 * **Holluxxx** – Creator
-* **Claude** – Bug fixes & ideas
 
 ---
 
