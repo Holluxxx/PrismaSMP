@@ -16,10 +16,9 @@
         "G": "minecraft:jungle_sapling",
         "H": "minecraft:cherry_blossom_sapling",
         "I": "minecraft:torch_flower"
-        "
     },
     "result": {
-        "id": "minecraft:pink_dye",
+        "id": "minecraft:green_dye",
         "components": {
             "minecraft:custom_name": {"text":"♥ Terra Artifact ♥","italic":false,"color":"light_purple","bold":true},
             "minecraft:lore": [
