@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["durability_artifact"]
+                        "strings": ["terra_artifact"]
                     }
                 }
             }
