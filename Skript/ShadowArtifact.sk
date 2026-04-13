@@ -1,0 +1,130 @@
+# ============================================
+# Shadow Artifact - PrismaSMP
+# Double sneak to teleport + freeze + assassinate
+# ============================================
+
+options:
+    cooldown: 5 seconds
+    freeze_duration: 3 seconds
+    detection_range: 20
+    assassination_window: 1.5 seconds
+    assassination_multiplier: 2
+
+on load:
+    clear {frozen::*}
+
+# ---- DOUBLE SNEAK DETECTION ----
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    # Check if offhand is Shadow Artifact
+    if name of player's offhand tool contains "Shadow Artifact":
+
+        if {lastSneak::%uuid of player%} is set:
+            if difference between now and {lastSneak::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak::%uuid of player%}
+
+                # Fire the blink
+                shadowBlink(player)
+                stop
+
+        set {lastSneak::%uuid of player%} to now
+
+# ---- COOLDOWN CHECK + BLINK ----
+function shadowBlink(p: player):
+    if {shadow_cd::%{_p}%} is set:
+        send action bar "&8&l[&7Shadow Blink&8&l] &cOn cooldown!" to {_p}
+        stop
+
+    # Find nearest player within range
+    set {_target} to nearest player within {@detection_range} blocks of {_p}
+
+    if {_target} is not set:
+        send action bar "&8[&7Shadow Blink&8] &cNo target in range!" to {_p}
+        stop
+
+    if {_target} is {_p}:
+        send action bar "&8[&7Shadow Blink&8] &cNo target in range!" to {_p}
+        stop
+
+    # Effects on caster
+    play sound "entity.enderman.teleport" at {_p} with volume 1 and pitch 1
+    spawn 80 portal particles at location of {_p} with offset 0.3, 1, 0.3
+
+    # Teleport caster to target
+    teleport {_p} to location of {_target}
+
+    # Effects on target
+    play sound "entity.elder_guardian.curse" at {_target} with volume 1 and pitch 1
+    spawn 60 snowflake particles at location of {_target} with offset 0.3, 1, 0.3
+    send title "&8&l☾ SHADOW BLINK ☾" with subtitle "&7You have been marked..." to {_p} for 2 seconds
+    send action bar "&8&l[&7Shadow Artifact&8&l] &7Target frozen!" to {_p}
+
+    # Freeze the target
+    freezePlayer({_target}, {@freeze_duration})
+
+    # Open assassination window
+    set {assassination_target::%{_p}%} to {_target}
+    set {assassination_window::%{_p}%} to true
+    send action bar "&8&l[&7Shadow Artifact&8&l] &6Assassination window open!" to {_p}
+
+    wait {@assassination_window}
+
+    # Window expired
+    if {assassination_window::%{_p}%} is set:
+        delete {assassination_window::%{_p}%}
+        delete {assassination_target::%{_p}%}
+        send action bar "&8&l[&7Shadow Artifact&8&l] &cAssassination window closed!" to {_p}
+
+    # Start cooldown
+    set {shadow_cd::%{_p}%} to true
+    wait {@cooldown}
+    delete {shadow_cd::%{_p}%}
+    send action bar "&8&l[&7Shadow Blink&8&l] &aReady!" to {_p}
+
+# ---- ASSASSINATION WINDOW ----
+on damage:
+    # Check if attacker has an open assassination window
+    if {assassination_window::%uuid of attacker%} is set:
+
+        # Check the victim is the marked target
+        if victim is {assassination_target::%uuid of attacker%}:
+
+            # Double the damage
+            set damage to damage * {@assassination_multiplier}
+
+            # Cleanup the window immediately
+            delete {assassination_window::%uuid of attacker%}
+            delete {assassination_target::%uuid of attacker%}
+
+            # Flashy feedback
+            play sound "entity.player.attack.crit" at attacker with volume 1 and pitch 0.8
+            spawn 40 crit particles at location of victim with offset 0.3, 1, 0.3
+            send title "&4&l✦ ASSASSINATION ✦" with subtitle "&cDouble damage dealt!" to attacker for 2 seconds
+            send action bar "&8&l[&7Shadow Artifact&8&l] &4&lAssassination!" to attacker
+
+# ---- FREEZE FUNCTION ----
+function freezePlayer(t: player, d: timespan):
+    set {frozen::%{_t}%} to location of {_t}
+    send action bar "&8&l[&7Shadow Artifact&8&l] &cYou are frozen!" to {_t}
+    apply slowness 255 to {_t} for {_d}
+    apply mining fatigue 255 to {_t} for {_d}
+    apply blindness to {_t} for 1 second
+
+    set {_ticks} to {_d} / 1 tick
+    loop {_ticks} times:
+        if {frozen::%{_t}%} is set:
+            teleport {_t} to {frozen::%{_t}%}
+        wait 1 tick
+
+    delete {frozen::%{_t}%}
+    send action bar "&8&l[&7Shadow Artifact&8&l] &aYou are free!" to {_t}
+    remove slowness from {_t}
+    remove mining fatigue from {_t}
+
+# ---- PREVENT FROZEN PLAYERS MOVING ----
+on player move:
+    if {frozen::%player%} is set:
+        cancel event
+        teleport player to {frozen::%player%}
