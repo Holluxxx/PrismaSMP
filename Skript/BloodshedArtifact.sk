@@ -1,68 +1,72 @@
-# =====================
-# PrismaSMP - Bloodshed Artifact Roar
-# =====================
+# ============================================
+# Bloodshed Artifact - PrismaSMP
+# Double sneak to unleash a Bloodshed Roar
+# ============================================
 
 options:
-    roar_cooldown: 10  # seconds before roar can be used again
-    roar_range: 8      # blocks radius
-    double_tap_window: 0.4  # seconds between crouches to count as double tap
-    effect_duration: 8 # seconds fear lasts
+    cooldown: 180 seconds
+    roar_range: 50
+    sound_range: 100
+    effect_duration: 10 seconds
 
-# Track crouch timestamps and cooldowns per player
-{prisma.roar.cooldown::%player%} = 0 by default
-{prisma.roar.lastsneakt::%player%} = 0 by default
+# ---- DOUBLE SNEAK DETECTION ----
+on toggle sneak:
+    if player is not sneaking:
+        stop
 
-on sneak toggle:
-    # Must be holding Bloodshed Artifact in offhand
-    if player's offhand item's custom model data strings contain "immense_strength_artifact":
-        # Only care about when they START crouching
-        if player is sneaking:
-            # Check if cooldown is still active
-            if {prisma.roar.cooldown::%player%} is set:
+    if name of player's offhand tool contains "☬ Bloodshed Artifact ☬":
+
+        if {lastSneak.bloodshed::%uuid of player%} is set:
+            if difference between now and {lastSneak.bloodshed::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak.bloodshed::%uuid of player%}
+                bloodshedRoar(player)
                 stop
 
-            set {_now} to now
-            set {_last} to {prisma.roar.lastsneakt::%player%}
+        set {lastSneak.bloodshed::%uuid of player%} to now
 
-            # If last crouch was within the double tap window
-            if difference between {_now} and {_last} <= {@double_tap_window} seconds:
-                # TRIGGER THE ROAR
-                execute roar for player
-                delete {prisma.roar.lastsneakt::%player%}
-            else:
-                # First crouch — just record the time
-                set {prisma.roar.lastsneakt::%player%} to {_now}
+# ---- COOLDOWN CHECK + ROAR ----
+function bloodshedRoar(p: player):
+    if {bloodshed_cd::%{_p}%} is set:
+        send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cOn cooldown!" to {_p}
+        stop
 
-function execute roar(p: player):
-    # Self buff — rage fuels the roar
-    apply strength 2 to {_p} for 3 seconds without particles
-    apply speed 1 to {_p} for 3 seconds without particles
+    # Sound — play roar for everyone nearby
+    loop all players:
+        if distance between loop-player and {_p} <= {@sound_range}:
+            play sound "entity.warden.roar" with volume 2 and pitch 0.7 at loop-player
 
-    # Set cooldown
-    set {prisma.roar.cooldown::%{_p}%} to true
-    wait {@roar_cooldown} seconds
-    delete {prisma.roar.cooldown::%{_p}%}
+    # Self buffs
+    apply strength 3 to {_p} for 15 seconds
+    apply darkness 1 to {_p} for 15 seconds
+    draw 300 of crimson spore at location of {_p}
+    draw 1 of explosion emitter at location of {_p}
 
-local function execute roar(p: player):
-    # Visual + sound on caster
-    play sound "entity.warden.roar" with volume 2 and pitch 0.8 at {_p}'s location for all players in radius 16 around {_p}
-    spawn 200 crimson spore particles at {_p}'s location with offset 0.5, 1, 0.5
-    spawn 1 explosion emitter particle at {_p}'s location
+    send title "&4&l☬ BLOODSHED ROAR ☬" with subtitle "&cEnemies tremble before you..." to {_p} for 3 seconds
+    send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cYou unleash a savage roar!" to {_p}
 
-    # Actionbar warning for caster
-    send actionbar "<bold><dark_red>☬ BLOODSHED ROAR</dark_red></bold>" to {_p}
+    # Fear all nearby players
+    set {_count} to 0
 
-    # Apply fear to all nearby players (excluding caster)
     loop players in radius {@roar_range} around {_p}:
         if loop-player is not {_p}:
-            apply nausea 1 to loop-player for {@effect_duration} seconds
-            apply slowness 2 to loop-player for {@effect_duration} seconds
-            apply weakness 1 to loop-player for {@effect_duration} seconds
-            apply darkness 0 to loop-player for {@effect_duration} seconds
+            apply nausea 1 to loop-player for {@effect_duration}
+            apply weakness 1 to loop-player for {@effect_duration}
+            apply slowness 2 to loop-player for {@effect_duration}
 
-            # Knockback — launch them away from caster
-            set {_dir} to direction from {_p}'s location to loop-player's location
-            push loop-player in {_dir} direction with force 1.5
+            send title "&4&l☬ BLOODSHED ROAR ☬" with subtitle "&cRUN!" to loop-player for 2 seconds
+            send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cYou have been struck with fear!" to loop-player
 
-            # Warn nearby players with actionbar
-            send actionbar "<bold><red>☬ BLOODSHED ROAR INCOMING — RUN!</red></bold>" to loop-player
+            add 1 to {_count}
+
+            loop 16 times:
+                if loop-player is online:
+                    play sound "entity.warden.heartbeat" with volume 1.5 and pitch 0.8 at loop-player
+                wait 0.5 seconds
+
+    send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cRoar struck &4%{_count}% &cenemy players!" to {_p}
+
+    # Start cooldown
+    set {bloodshed_cd::%{_p}%} to true
+    wait {@cooldown}
+    delete {bloodshed_cd::%{_p}%}
+    send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &aReady!" to {_p}
