@@ -15,7 +15,7 @@
         "F": "minecraft:acacia_sapling",
         "G": "minecraft:jungle_sapling",
         "H": "minecraft:cherry_sapling",
-        "I": "minecraft:torch_flower"
+        "I": "minecraft:torchflower"
     },
     "result": {
         "id": "minecraft:green_dye",
