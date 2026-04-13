@@ -1,0 +1,191 @@
+# ============================================
+# Undead Artifact - PrismaSMP (FINAL FIXED)
+# ============================================
+
+options:
+    cooldown: 120 seconds
+    despawn_time: 30 seconds
+
+##################################################
+# DOUBLE SNEAK DETECTION
+##################################################
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "☠ Undead Artifact ☠":
+
+        if {lastSneak.undead::%uuid of player%} is set:
+            if difference between now and {lastSneak.undead::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak.undead::%uuid of player%}
+                summonArmy(player)
+                stop
+
+        set {lastSneak.undead::%uuid of player%} to now
+
+##################################################
+# SUMMON FUNCTION
+##################################################
+
+function summonArmy(p: player):
+
+    # ✅ TIMESTAMP COOLDOWN
+    if {undead_cd::%uuid of {_p}%} is set:
+        if now < {undead_cd::%uuid of {_p}%}:
+            set {_t} to difference between {undead_cd::%uuid of {_p}%} and now
+            send action bar "&8&l[&0☠ Undead Artifact&8&l] &8On cooldown!" to {_p}
+            stop
+
+    set {undead_cd::%uuid of {_p}%} to now + {@cooldown}
+
+    # Remove old army
+    dismissArmy({_p})
+
+    # Effects
+    loop all players:
+        if distance between loop-player and {_p} <= 30:
+            play sound "entity.wither.spawn" with volume 2 and pitch 0.6 at loop-player
+
+    draw 200 of dust using dustOption(black, 1) at location of {_p}
+    draw 100 of dust using dustOption(gray, 1) at location of {_p}
+
+    send title "&8&l☠ UNDEAD ARMY ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
+
+    ##################################################
+    # SPAWN FORMATION
+    ##################################################
+
+    set {_loc1} to location of {_p}
+    add vector(2, 0, 0) to {_loc1}
+
+    set {_loc2} to location of {_p}
+    add vector(-1, 0, 1.5) to {_loc2}
+
+    set {_loc3} to location of {_p}
+    add vector(-1, 0, -1.5) to {_loc3}
+
+    loop 3 times:
+        if loop-number is 1:
+            spawn wither skeleton at {_loc1}
+        else if loop-number is 2:
+            spawn wither skeleton at {_loc2}
+        else:
+            spawn wither skeleton at {_loc3}
+
+        set {_mob} to last spawned entity
+
+        set name of {_mob} to "&8&l[&7☠ Undead&8&l] &7Servant of %name of {_p}%"
+        set {_mob}'s max health to 40
+        heal {_mob}
+
+        set {undead.owner::%uuid of {_mob}%} to uuid of {_p}
+        add {_mob} to {undead.army::%uuid of {_p}%::*}
+
+    set {undead.active::%uuid of {_p}%} to true
+
+    ##################################################
+    # DESPAWN (ASYNC FIX)
+    ##################################################
+
+    set {_pUUID} to uuid of {_p}
+
+    run 1 tick later:
+        wait {@despawn_time}
+        if {undead.active::%{_pUUID}%} is set:
+            dismissArmy({_p})
+
+    ##################################################
+    # FOLLOW LOOP
+    ##################################################
+
+    while {undead.active::%uuid of {_p}%} is set:
+
+        loop {undead.army::%uuid of {_p}%::*}:
+
+            if loop-value is alive:
+
+                if distance between loop-value and {_p} > 6:
+                    set {_tploc} to location of {_p}
+                    set {_rx} to random number between -2 and 2
+                    set {_rz} to random number between -2 and 2
+                    add vector({_rx}, 0, {_rz}) to {_tploc}
+                    teleport loop-value to {_tploc}
+
+                if {undead.target::%uuid of {_p}%} is set:
+                    set {_target} to getTarget({undead.target::%uuid of {_p}%})
+                    if {_target} is set:
+                        set target of loop-value to {_target}
+
+            else:
+                remove loop-value from {undead.army::%uuid of {_p}%::*}
+
+        wait 5 ticks
+
+##################################################
+# TRACK TARGET
+##################################################
+
+on damage:
+    if attacker is a player:
+        if name of attacker's offhand tool contains "Undead Artifact":
+            if victim is a player:
+                set {undead.target::%uuid of attacker%} to uuid of victim
+
+##################################################
+# PREVENT FRIENDLY FIRE
+##################################################
+
+on target:
+    if entity is wither skeleton:
+        if {undead.owner::%uuid of event-entity%} is set:
+            if target is a player:
+                if uuid of target is {undead.owner::%uuid of event-entity%}:
+                    cancel event
+
+##################################################
+# EXTRA SAFETY
+##################################################
+
+every 2 ticks:
+    loop all wither skeletons:
+        set {_owner} to {undead.owner::%uuid of loop-entity%}
+
+        if {_owner} is set:
+            if target of loop-entity is a player:
+                if "%uuid of target of loop-entity%" is "%{_owner}%":
+                    clear target of loop-entity
+
+##################################################
+# DISMISS
+##################################################
+
+function dismissArmy(p: player):
+
+    delete {undead.active::%uuid of {_p}%}
+    delete {undead.target::%uuid of {_p}%}
+
+    loop {undead.army::%uuid of {_p}%::*}:
+        if loop-value is alive:
+            draw 30 of dust using dustOption(gray, 1) at location of loop-value
+            play sound "entity.zombie.death" with volume 1 and pitch 0.5 at loop-value
+            kill loop-value
+
+    delete {undead.army::%uuid of {_p}%::*}
+
+##################################################
+# CLEANUP
+##################################################
+
+on quit:
+    if name of player's offhand tool contains "Undead Artifact":
+        dismissArmy(player)
+
+##################################################
+# HELPER
+##################################################
+
+function getTarget(id: text) :: player:
+    loop all players:
+        if "%uuid of loop-player%" is {_id}:
+            return loop-player
