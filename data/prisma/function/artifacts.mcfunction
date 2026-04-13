@@ -2,9 +2,9 @@ execute as @a[predicate=prisma:has_immense_strength_artifact] run effect give @s
 execute as @a[predicate=prisma:has_immense_strength_artifact] run attribute @s minecraft:max_health base set 22
 execute as @a[predicate=!prisma:has_immense_strength_artifact] run attribute @s minecraft:max_health base set 20
 
-execute as @a[predicate=prisma:has_stealth_artifact] run effect give @s minecraft:invisibility 1 0 false
-execute as @a[predicate=prisma:has_stealth_artifact] run effect give @s minecraft:night_vision 11 0 false
-execute as @a[predicate=prisma:has_stealth_artifact] run effect give @s minecraft:speed 1 1 false
+execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:invisibility 1 0 false
+execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:night_vision 11 0 false
+execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:speed 1 1 false
 
 execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:speed 1 3 false
 execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:jump_boost 1 5 false
