@@ -9,7 +9,7 @@
     "key": {
         "A": "minecraft:wither_rose",
         "B": "minecraft:end_crystal",
-        "C": "minecraft:wither_skull",
+        "C": "minecraft:wither_skeleton_skull",
         "D": "minecraft:nether_star"
     },
     "result": {
