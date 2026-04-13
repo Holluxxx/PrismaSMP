@@ -15,7 +15,7 @@
     "result": {
         "id": "minecraft:fermented_spider_eye",
         "components": {
-            "minecraft:custom_name": {"text":"☬ Tier II Strength Artifact ☬","italic":false,"color":"dark_red","bold":true},
+            "minecraft:custom_name": {"text":"☬ Bloodshed Artifact ☬","italic":false,"color":"dark_red","bold":true},
             "minecraft:lore": [
                 {"text":"Become insanely stronger when held!","italic":false,"color":"gold","bold":true},
                 {"text":"Created by the hatred of fallen kingdoms! An artifact so intense","italic":false,"color":"yellow","bold":false}
