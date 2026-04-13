@@ -1,6 +1,7 @@
+execute as @a[predicate=!prisma:has_immense_strength_artifact, predicate=!prisma:has_terra_artifact, predicate=!prisma:has_death_artifact] run attribute @s minecraft:max_health base set 20
+
 execute as @a[predicate=prisma:has_immense_strength_artifact] run effect give @s minecraft:strength 1 1 false
 execute as @a[predicate=prisma:has_immense_strength_artifact] run attribute @s minecraft:max_health base set 22
-execute as @a[predicate=!prisma:has_immense_strength_artifact] run attribute @s minecraft:max_health base set 20
 
 execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:invisibility 1 0 false
 execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:night_vision 11 0 false
@@ -16,11 +17,9 @@ execute as @a[predicate=prisma:has_fire_artifact] run effect give @s minecraft:f
 
 execute as @a[predicate=prisma:has_terra_artifact] run effect give @s minecraft:resistance 1 0 false
 execute as @a[predicate=prisma:has_terra_artifact] run attribute @s minecraft:max_health base set 26
-execute as @a[predicate=!prisma:has_terra_artifact] run attribute @s minecraft:max_health base set 20
 execute as @a[predicate=prisma:has_terra_artifact] run effect give @s minecraft:haste 1 0 false
 
 execute as @a[predicate=prisma:has_death_artifact] run attribute @s minecraft:max_health base set 16
-execute as @a[predicate=!prisma:has_death_artifact] run attribute @s minecraft:max_health base set 20
 execute as @a[predicate=prisma:has_death_artifact] run effect give @s minecraft:strength 1 1 false
 
 execute as @a[predicate=prisma:has_undead_artifact] run effect give @s minecraft:strength 1 0 false
