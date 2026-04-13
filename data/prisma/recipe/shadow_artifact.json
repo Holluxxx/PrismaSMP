@@ -15,16 +15,16 @@
     "result": {
         "id": "minecraft:amethyst_shard",
         "components": {
-            "minecraft:custom_name": {"text":"☾ Invisible Artifact ☾","italic":false,"color":"gray","bold":true},
+            "minecraft:custom_name": {"text":"☾ Shadow Artifact ☾","italic":false,"color":"gray","bold":true},
             "minecraft:lore": [
-                {"text":"Become invisible when held!","italic":false,"color":"gold","bold":true},
-                {"text":"An artifact forged from the core of a warden... Told to be used by several generations of spies and assassins during missions","italic":false,"color":"blue","bold":false}
+                {"text":"Become one with the shadow when held!","italic":false,"color":"gold","bold":true},
+                {"text":"An artifact born from the Shadow of Luna","italic":false,"color":"blue","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "invisibility_artifact"
+                    "shadow_artifact"
                 ]
             }
         }
