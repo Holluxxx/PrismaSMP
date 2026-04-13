@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CBC",
+        "BAB",
+        "CBC"
+    ],
+    "key": {
+        "A": "minecraft:dragon_head",
+        "B": "minecraft:netherite_ingot",
+        "C": "minecraft:nether_star"
+    },
+    "result": {
+        "id": "minecraft:bone",
+        "components": {
+            "minecraft:custom_name": {"text":"☠ Undead Artifact ☠","italic":false,"color":"gray","bold":true},
+            "minecraft:lore": [
+                {"text":"Command the undead with a wave of a finger!","italic":false,"color":"red","bold":true},
+                {"text":"An artifact forged from the flesh of soldiers","italic":false,"color":"dark_red","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "undead_artifact"
+                ]
+            }
+        }
+    }
+}
