@@ -4,8 +4,8 @@
 # ============================================
 
 options:
-    cooldown: 5 seconds
-    freeze_duration: 3 seconds
+    cooldown: 60 seconds
+    freeze_duration: 2 seconds
     detection_range: 20
     assassination_window: 1.5 seconds
     assassination_multiplier: 2
