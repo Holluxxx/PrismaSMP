@@ -18,14 +18,11 @@ on toggle sneak:
     if player is not sneaking:
         stop
 
-    # Check if offhand is Shadow Artifact
     if name of player's offhand tool contains "Shadow Artifact":
 
         if {lastSneak::%uuid of player%} is set:
             if difference between now and {lastSneak::%uuid of player%} <= 0.5 seconds:
                 delete {lastSneak::%uuid of player%}
-
-                # Fire the blink
                 shadowBlink(player)
                 stop
 
@@ -37,28 +34,25 @@ function shadowBlink(p: player):
         send action bar "&8&l[&7Shadow Blink&8&l] &cOn cooldown!" to {_p}
         stop
 
-    # Find nearest player within range
-    set {_target} to nearest player within {@detection_range} blocks of {_p}
+    set {_target} to (random element out of (players in radius {@detection_range} of {_p}) where [input is not {_p}])
 
     if {_target} is not set:
         send action bar "&8[&7Shadow Blink&8] &cNo target in range!" to {_p}
         stop
 
-    if {_target} is {_p}:
-        send action bar "&8[&7Shadow Blink&8] &cNo target in range!" to {_p}
-        stop
-
-    # Effects on caster
-    play sound "entity.enderman.teleport" at {_p} with volume 1 and pitch 1
-    spawn 80 portal particles at location of {_p} with offset 0.3, 1, 0.3
+    # Caster particles — purple shadow theme
+    draw 80 of dust using dustOption(purple, 1) at location of {_p}
+    play sound "entity.enderman.teleport" to {_p} at location of {_p}
 
     # Teleport caster to target
     teleport {_p} to location of {_target}
 
-    # Effects on target
-    play sound "entity.elder_guardian.curse" at {_target} with volume 1 and pitch 1
-    spawn 60 snowflake particles at location of {_target} with offset 0.3, 1, 0.3
-    send title "&8&l☾ SHADOW BLINK ☾" with subtitle "&7You have been marked..." to {_p} for 2 seconds
+    # Target particles — gray freeze theme
+    draw 60 of dust using dustOption(gray, 1) at location of {_target}
+    draw 60 of dust using dustOption(white, 1) at location of {_target}
+    play sound "entity.elder_guardian.curse" to {_target} at location of {_target}
+
+    send title "&8&l☾ SHADOW BLINK ☾" with subtitle "&7You have been marked..." to {_target} for 2 seconds
     send action bar "&8&l[&7Shadow Artifact&8&l] &7Target frozen!" to {_p}
 
     # Freeze the target
@@ -71,7 +65,6 @@ function shadowBlink(p: player):
 
     wait {@assassination_window}
 
-    # Window expired
     if {assassination_window::%{_p}%} is set:
         delete {assassination_window::%{_p}%}
         delete {assassination_target::%{_p}%}
@@ -85,22 +78,18 @@ function shadowBlink(p: player):
 
 # ---- ASSASSINATION WINDOW ----
 on damage:
-    # Check if attacker has an open assassination window
     if {assassination_window::%uuid of attacker%} is set:
-
-        # Check the victim is the marked target
         if victim is {assassination_target::%uuid of attacker%}:
-
-            # Double the damage
             set damage to damage * {@assassination_multiplier}
 
-            # Cleanup the window immediately
             delete {assassination_window::%uuid of attacker%}
             delete {assassination_target::%uuid of attacker%}
 
-            # Flashy feedback
-            play sound "entity.player.attack.crit" at attacker with volume 1 and pitch 0.8
-            spawn 40 crit particles at location of victim with offset 0.3, 1, 0.3
+            # Red assassination particles
+            draw 60 of dust using dustOption(red, 1) at location of victim
+            draw 20 of dust using dustOption(rgb(139, 0, 0), 1) at location of victim
+            play sound "entity.player.attack.crit" to attacker at location of attacker
+
             send title "&4&l✦ ASSASSINATION ✦" with subtitle "&cDouble damage dealt!" to attacker for 2 seconds
             send action bar "&8&l[&7Shadow Artifact&8&l] &4&lAssassination!" to attacker
 
