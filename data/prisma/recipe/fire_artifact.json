@@ -17,8 +17,8 @@
         "components": {
             "minecraft:custom_name": {"text":"☼ Fire Artifact ☼","italic":false,"color":"red","bold":true},
             "minecraft:lore": [
-                {"text":"Become invincible to fire when held!","italic":false,"color":"gold","bold":true},
-                {"text":"An artifact forged from compressed lava.","italic":false,"color":"dark_red","bold":false}
+                {"text":"Thou carries the Flame of Ambition!","italic":false,"color":"red","bold":true},
+                {"text":"The power of hell is at your fingertips...","italic":false,"color":"dark_red","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
