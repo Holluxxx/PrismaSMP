@@ -1,0 +1,73 @@
+# ============================================
+# Sun Artifact - PrismaSMP
+# ============================================
+
+options:
+    cooldown: 10 seconds
+    burst_radius: 5
+    burst_damage: 3
+    blindness_duration: 3 seconds
+
+##################################################
+# DOUBLE SNEAK DETECTION
+##################################################
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "☀ Sun Artifact ☀":
+
+        if {lastSneak.sun::%uuid of player%} is set:
+            if difference between now and {lastSneak.sun::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak.sun::%uuid of player%}
+                solarBurst(player)
+                stop
+
+        set {lastSneak.sun::%uuid of player%} to now
+
+##################################################
+# SOLAR BURST FUNCTION
+##################################################
+
+function solarBurst(p: player):
+
+    # TIMESTAMP COOLDOWN
+    if {sun_cd::%uuid of {_p}%} is set:
+        if now < {sun_cd::%uuid of {_p}%}:
+            send action bar "&6&l[&e☀ Sun Artifact&6&l] &6On cooldown!" to {_p}
+            stop
+
+    set {sun_cd::%uuid of {_p}%} to now + {@cooldown}
+
+    # Sound & visuals
+    loop all players:
+        if distance between loop-player and {_p} <= 30:
+            play sound "entity.lightning_bolt.thunder" with volume 2 and pitch 1.5 at loop-player
+
+    draw 200 of dust using dustOption(yellow, 1) at location of {_p}
+    draw 100 of dust using dustOption(orange, 1) at location of {_p}
+
+    send title "&e&l☀ SOLAR BURST ☀" with subtitle "&6The sun smites your enemies!" to {_p} for 3 seconds
+    send action bar "&6☀ &eSolar Burst activated!" to {_p}
+
+    ##################################################
+    # DAMAGE & BLIND NEARBY ENTITIES
+    ##################################################
+
+    loop entities in radius {@burst_radius} around {_p}:
+        if loop-entity is not {_p}:
+            if loop-entity is a player:
+                apply blindness to loop-entity for {@blindness_duration}
+                apply slowness 1 to loop-entity for {@blindness_duration}
+            damage loop-entity by {@burst_damage}
+            draw 30 of dust using dustOption(yellow, 1) at location of loop-entity
+
+##################################################
+# CLEANUP ON QUIT
+##################################################
+
+on quit:
+    if name of player's offhand tool contains "Sun Artifact":
+        delete {lastSneak.sun::%uuid of player%}
+        delete {sun_cd::%uuid of player%}
