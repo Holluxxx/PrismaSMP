@@ -14,16 +14,16 @@
     "result": {
         "id": "minecraft:pink_dye",
         "components": {
-            "minecraft:custom_name": {"text":"♥ Love Artifact ♥","italic":false,"color":"light_purple","bold":true},
+            "minecraft:custom_name": {"text":"♥ Terra Artifact ♥","italic":false,"color":"light_purple","bold":true},
             "minecraft:lore": [
-                {"text":"Cupid may watch over you!","italic":false,"color":"red","bold":true},
-                {"text":"This artifact is know to give the wielder a longer life","italic":false,"color":"light_purple","bold":false}
+                {"text":"Mother nature shall protect thee!","italic":false,"color":"dark_green","bold":true},
+                {"text":"Whoever posseses this artifact will be gifted divine protection!","italic":false,"color":"gray","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "love_artifact"
+                    "terra_artifact"
                 ]
             }
         }
