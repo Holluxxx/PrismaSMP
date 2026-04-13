@@ -2,14 +2,21 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "CBC",
-        "BAB",
-        "CBC"
+        "ABC",
+        "DEF",
+        "GHI"
     ],
     "key": {
-        "A": "minecraft:redstone_ore",
-        "B": "minecraft:diamond_block",
-        "C": "minecraft:red_dye"
+        "A": "minecraft:oak_sapling",
+        "B": "minecraft:birch_sapling",
+        "C": "minecraft:spruce_sapling",
+        "D": "minecraft:dark_oak_sapling",
+        "E": "minecraft:deepslate_emerald_ore",
+        "F": "minecraft:acacia_sapling",
+        "G": "minecraft:jungle_sapling",
+        "H": "minecraft:cherry_blossom_sapling",
+        "I": "minecraft:torch_flower"
+        "
     },
     "result": {
         "id": "minecraft:pink_dye",
