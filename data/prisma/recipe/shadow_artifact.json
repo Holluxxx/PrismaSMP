@@ -17,7 +17,7 @@
         "components": {
             "minecraft:custom_name": {"text":"☾ Shadow Artifact ☾","italic":false,"color":"gray","bold":true},
             "minecraft:lore": [
-                {"text":"Become one with the shadow when held!","italic":false,"color":"gold","bold":true},
+                {"text":"Become one with the shadow when held!","italic":false,"color":"gray","bold":true},
                 {"text":"An artifact born from the Shadow of Luna","italic":false,"color":"blue","bold":false}
             ],
             "minecraft:rarity": "epic",
