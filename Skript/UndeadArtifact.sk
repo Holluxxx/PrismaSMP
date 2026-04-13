@@ -79,6 +79,26 @@ function summonArmy(p: player):
         set {_mob}'s max health to 40
         heal {_mob}
 
+        set {_sword} to netherite sword
+        enchant {_sword} with sharpness 2
+        set {_mob}'s tool to {_sword}
+
+        set {_helmet} to netherite helmet
+        set {_chest} to netherite chestplate
+        set {_legs} to netherite leggings
+        set {_boots} to netherite boots
+        enchant {_helmet} with protection 1
+        enchant {_chest} with protection 1
+        enchant {_legs} with protection 1
+        enchant {_boots} with protection 1
+        set {_mob}'s helmet to {_helmet}
+        set {_mob}'s chestplate to {_chest}
+        set {_mob}'s leggings to {_legs}
+        set {_mob}'s boots to {_boots}
+        
+        apply fire resistance 2 to {_mob} for 99999 seconds
+        apply speed 1 to {_mob} for 99999 seconds
+
         set {undead.owner::%uuid of {_mob}%} to uuid of {_p}
         add {_mob} to {undead.army::%uuid of {_p}%::*}
 
@@ -183,9 +203,13 @@ on quit:
 
 ##################################################
 # HELPER
-##################################################
+#################################################
 
 function getTarget(id: text) :: player:
     loop all players:
         if "%uuid of loop-player%" is {_id}:
             return loop-player
+
+on death of wither skeleton:
+    if {undead.owner::%uuid of victim%} is set:
+        clear drops
