@@ -1,0 +1,122 @@
+# ============================================
+# Sacrificial Artifact - PrismaSMP
+# Double sneak to activate blood mode.
+# Deal self damage, then bleed out your enemies
+# with 5 hits for a massive damage burst.
+# ============================================
+
+options:
+    cooldown: 20 seconds
+    bleed_duration: 10 seconds
+    hits_to_bleed: 5
+    bleed_burst_damage: 12
+    self_damage_amount: 8
+
+on load:
+    clear {bleed_stacks::*}
+    clear {bleed_active::*}
+    clear {sacrificial_active::*}
+
+# ---- DOUBLE SNEAK DETECTION ----
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "☠ Sacrificial Artifact":
+
+        if {lastSneak_sac::%uuid of player%} is set:
+            if difference between now and {lastSneak_sac::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_sac::%uuid of player%}
+                activateBlood(player)
+                stop
+
+        set {lastSneak_sac::%uuid of player%} to now
+
+# ---- BLOOD MODE ACTIVATION ----
+function activateBlood(p: player):
+    if {sacrificial_cd::%{_p}%} is set:
+        send action bar "&8&l[&4☠ Sacrificial Artifact&8&l] &cOn cooldown!" to {_p}
+        stop
+
+    # Deal flat self damage (4 hearts)
+    damage {_p} by {@self_damage_amount}
+
+    # Activate blood mode
+    set {sacrificial_active::%{_p}%} to true
+
+    # Visuals and sound on caster
+    draw 60 of dust using dustOption(red, 1) at location of {_p}
+    draw 30 of dust using dustOption(rgb(139, 0, 0), 1) at location of {_p}
+    play sound "entity.player.hurt" to {_p} at location of {_p}
+
+    send title "&4&l⚰ Blood Sacrifice ⚰" with subtitle "&cYour Weapon Is Infused With Your Blood" to {_p} for 3 seconds
+    send action bar "&8&l[&4☠ Sacrificial Artifact&8&l] &cBlood mode active! &710 seconds remaining..." to {_p}
+
+    # Wait for blood window to expire
+    wait {@bleed_duration}
+
+    # Cleanup if no full bleed triggered
+    if {sacrificial_active::%{_p}%} is set:
+        delete {sacrificial_active::%{_p}%}
+        delete {bleed_stacks::%{_p}%}
+        send action bar "&8&l[&4Sacrificial&8&l] &7Blood faded..." to {_p}
+
+    # Start cooldown
+    set {sacrificial_cd::%{_p}%} to true
+    wait {@cooldown}
+    delete {sacrificial_cd::%{_p}%}
+    send action bar "&8&l[&4☠ Sacrificial Artifact&8&l] &aReady!" to {_p}
+
+# ---- HIT DETECTION — BLEED BUILDUP ----
+on damage:
+    if {sacrificial_active::%uuid of attacker%} is set:
+
+        if {bleed_stacks::%uuid of victim%} is not set:
+            set {bleed_stacks::%uuid of victim%} to 0
+
+        add 1 to {bleed_stacks::%uuid of victim%}
+        set {_stacks} to {bleed_stacks::%uuid of victim%}
+        set {_max} to {@hits_to_bleed}
+
+        # Build the bleed bar
+        set {_bar} to ""
+        loop {_stacks} times:
+            set {_bar} to "%{_bar}%&4█"
+        set {_remaining} to {_max} - {_stacks}
+        loop {_remaining} times:
+            set {_bar} to "%{_bar}%&8█"
+
+        # Show buildup to both players
+        send action bar "&8&l[&4Bleed&8&l] %{_bar}% &8(&c%{_stacks}%&8/&c%{_max}%&8)" to attacker
+        send action bar "&4&lBlood building up... &8[%{_bar}%&8]" to victim
+
+        # Particles on victim each hit
+        draw 15 of dust using dustOption(red, 1) at location of victim
+        play sound "entity.player.hurt" to victim at location of victim
+
+        # Check if bleed bar is full
+        if {_stacks} >= {@hits_to_bleed}:
+            bleedBurst(attacker, victim)
+
+# ---- BLEED BURST ----
+function bleedBurst(attacker: player, victim: player):
+    delete {bleed_stacks::%{_victim}%}
+    delete {sacrificial_active::%{_attacker}%}
+
+    # Deal burst damage
+    damage {_victim} by {@bleed_burst_damage}
+
+    # Dramatic visuals on victim
+    draw 120 of dust using dustOption(red, 1) at location of {_victim}
+    draw 60 of dust using dustOption(rgb(139, 0, 0), 1) at location of {_victim}
+    play sound "entity.wither.hurt" to {_victim} at location of {_victim}
+    play sound "entity.player.hurt" to {_victim} at location of {_victim}
+
+    # Apply weakness briefly after burst
+    apply weakness 2 to {_victim} for 3 seconds
+
+    # Titles
+    send title "&f " with subtitle "&4&l✦ Bleeding Out! ✦" to {_victim} for 3 seconds
+    send action bar "&8&l[&4☠ Sacrificial Artifact&8&l] &4&lApplied Bleed!" to {_attacker}
+
+    play sound "minecraft:entity.vex.charge" to {_attacker} at location of {_attacker}
