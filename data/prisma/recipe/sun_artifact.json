@@ -23,7 +23,7 @@
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "fire_artifact"
+                    "sun_artifact"
                 ]
             }
         }
