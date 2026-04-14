@@ -10,8 +10,8 @@ execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft
 execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:speed 1 3 false
 execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:jump_boost 1 5 false
 
-execute as @a[predicate=prisma:has_sea_artifact] run effect give @s minecraft:water_breathing 1 0 false
-execute as @a[predicate=prisma:has_sea_artifact] run effect give @s minecraft:dolphins_grace 2 1 false
+execute as @a[predicate=prisma:has_tempest_artifact] run effect give @s minecraft:water_breathing 1 0 false
+execute as @a[predicate=prisma:has_tempest_artifact] run effect give @s minecraft:dolphins_grace 2 1 false
 
 execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:fire_resistance 1 0 false
 execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:haste 1 0 false
