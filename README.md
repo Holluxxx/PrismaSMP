@@ -51,7 +51,12 @@ PrismaSMP is a survival-friendly datapack — now powered by **Skript** — that
    *(Path may vary — the above is common on providers like PebbleHost)*
 3. Place the `.zip` file inside the folder
 4. **Extract the zip**
-5. Restart your server
+5. Move All Skript scripts into the official Skript scripts folder
+   ```
+   /home/container/plugins/skript/scripts
+   ```
+6. Delete old "Skript" folder that is provided in the datapack
+7. Restart your server
 
 > ✅ Both the datapack and the Skript files will load automatically on startup.
 
