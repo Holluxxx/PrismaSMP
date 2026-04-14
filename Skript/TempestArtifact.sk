@@ -46,7 +46,7 @@ on toggle sneak:
 
 function summonSeaStorm(p: player):
     if {sea_cd::%uuid of {_p}%} is set:
-        send action bar "&8&l[&bSea Artifact&8&l] &cOn cooldown!" to {_p}
+        send action bar "&8&l[&b✱ Tempest Artifact&8&l] &cOn cooldown!" to {_p}
         stop
     set weather in world of {_p} to thunder
     set {sea_storm_active::%uuid of {_p}%} to true
@@ -86,12 +86,12 @@ function stormRainLoop(p: player):
 
 function callLightning(p: player):
     if {sea_lightning_cd::%uuid of {_p}%} is set:
-        send action bar "&8&l[&bSea Artifact&8&l] &cLightning on cooldown!" to {_p}
+        send action bar "&8&l[&b✱ Tempest Artifact&8&l] &cLightning on cooldown!" to {_p}
         stop
 
     set {_target} to (random element out of (players in radius {@lightning_range} of {_p}) where [input is not {_p}])
     if {_target} is not set:
-        send action bar "&8&l[&bSea Artifact&8&l] &cNo target in range!" to {_p}
+        send action bar "&8&l[&b✱ Tempest Artifact&8&l] &cNo target in range!" to {_p}
         stop
 
     # ⚡ Visual lightning
@@ -107,10 +107,10 @@ function callLightning(p: player):
     draw 60 of dust using dustOption(rgb(255, 255, 0), 1) at location of {_target}
     play sound "entity.lightning_bolt.thunder" at location of {_target} for {_p}
 
-    send action bar "&8&l[&bSea Artifact&8&l] &eStrike!" to {_p}
+    send action bar "&8&l[&b✱ Tempest Artifact&8&l] &eStrike!" to {_p}
     send title "&e&l⚡ STRUCK ⚡" with subtitle "&cYou have been struck by lightning!" to {_target} for 2 seconds
 
     set {sea_lightning_cd::%uuid of {_p}%} to true
     wait {@lightning_cooldown}
     delete {sea_lightning_cd::%uuid of {_p}%}
-    send action bar "&8&l[&bSea Artifact&8&l] &aLightning ready!" to {_p}
+    send action bar "&8&l[&b✱ Tempest Artifact&8&l] &aLightning ready!" to {_p}
