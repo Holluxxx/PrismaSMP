@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["fire_artifact"]
+                        "strings": ["sun_artifact"]
                     }
                 }
             }
