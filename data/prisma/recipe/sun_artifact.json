@@ -2,15 +2,14 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "DBD",
         "CAC",
-        "DBD"
+        "ABA",
+        "CAC"
     ],
     "key": {
         "A": "minecraft:fire_charge",
-        "B": "minecraft:netherite_ingot",
-        "C": "minecraft:gold_block",
-        "D": "minecraft:lava_bucket"
+        "B": "minecraft:netherite_block",
+        "C": "minecraft:magma_block"
     },
     "result": {
         "id": "minecraft:honeycomb",
