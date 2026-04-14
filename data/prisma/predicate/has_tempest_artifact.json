@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["sea_artifact"]
+                        "strings": ["tempest_artifact"]
                     }
                 }
             }
