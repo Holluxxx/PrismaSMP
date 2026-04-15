@@ -1,20 +1,15 @@
 # ============================================
-# Sun Artifact - PrismaSMP
-# Double sneak to summon the Cruel Sun.
-# A massive fireball spawns in the sky and
-# shoots fire beams at nearby enemies every
-# 2 seconds, igniting and damaging them.
+# Sun Artifact - PrismaSMP (GOD VERSION + SOUND)
 # ============================================
 
 options:
     cooldown: 40 seconds
-    sun_duration: 15 seconds
     beam_range: 25
     beam_damage: 6
     ignite_duration: 4 seconds
     sun_height: 15
 
-# ---- DOUBLE SNEAK DETECTION ----
+# ---- DOUBLE SNEAK ----
 on toggle sneak:
     if player is not sneaking:
         stop
@@ -29,123 +24,212 @@ on toggle sneak:
 
         set {lastSneak_sun::%uuid of player%} to now
 
+
 # ---- CRUEL SUN ----
 function cruelSun(p: player):
+
     if {sun_cd::%uuid of {_p}%} is set:
-        send action bar "&8&l[&6Sun Artifact&8&l] &cOn cooldown!" to {_p}
+        send action bar "&cOn cooldown!" to {_p}
         stop
 
     set {cruel_sun_active::%uuid of {_p}%} to true
 
-    # Spawn the fireball high in the sky above the caster
-    set {_sunLoc} to location of {_p}
-    add {@sun_height} to y-coordinate of {_sunLoc}
-    set {_sun} to spawn fireball at {_sunLoc}
-    set {cruel_sun_entity::%uuid of {_p}%} to {_sun}
-
-    # Make it huge and stationary
-    set size of {_sun} to 5
-    set velocity of {_sun} to vector(0, 0, 0)
-
-    # Fire resistance for caster
     apply fire resistance to {_p} for 20 seconds
     apply strength 1 to {_p} for 20 seconds
 
-    # Dramatic activation
-    play sound "entity.ghast.warn" at location of {_p} for {_p}
-    play sound "entity.blaze.ambient" at location of {_p} for {_p}
-    send title "&6&l☀ CRUEL SUN ☀" with subtitle "&cThe sun has awakened its wrath..." to {_p} for 3 seconds
-    send action bar "&8&l[&6Sun Artifact&8&l] &6The Cruel Sun rises!" to {_p}
+    # 🌑 PRE-ACTIVATION
+    play sound "entity.warden.heartbeat" at location of {_p}
+    play sound "entity.ghast.warn" at location of {_p}
 
-    # Broadcast to all nearby players
-    loop players in radius {@beam_range} of {_p}:
-        if loop-player is not {_p}:
-            send title "&6&l☀ CRUEL SUN ☀" with subtitle "&cRun... it sees you." to loop-player for 3 seconds
+    set time of world of {_p} to day
 
-    # ---- MAIN LOOP — fire beams every 2 seconds ----
+    wait 5 ticks
+
+    # 🌞 SUN SPAWN
+    play sound "entity.ender_dragon.growl" at location of {_p}
+    play sound "entity.blaze.ambient" at location of {_p}
+    play sound "block.beacon.power_select" at location of {_p}
+
+    send title "&6☀ CRUEL SUN ☀" with subtitle "&cThe sun awakens..." to {_p}
+
     set {_ticks} to 0
-    set {_maxTicks} to {@sun_duration} / 1 second * 20
 
-    while {_ticks} < {_maxTicks}:
-        if {cruel_sun_active::%uuid of {_p}%} is set:
+    set {_sunLoc} to location of {_p}
+    add {@sun_height} to y-coordinate of {_sunLoc}
 
-            # Keep the fireball locked in the sky above the caster
-            set {_sunLoc} to location of {_p}
-            add {@sun_height} to y-coordinate of {_sunLoc}
-            teleport {_sun} to {_sunLoc}
-            set velocity of {_sun} to vector(0, 0, 0)
+    while {_ticks} < 300:
+        if {cruel_sun_active::%uuid of {_p}%} is not set:
+            stop
 
-            # Constant swirling fire particles around the sun
-            set {_angle} to ({_ticks} * 15) mod 360
-            set {_px} to sin({_angle}) * 3
-            set {_pz} to cos({_angle}) * 3
-            set {_pLoc} to location of {_sun}
-            add {_px} to x-coordinate of {_pLoc}
-            add {_pz} to z-coordinate of {_pLoc}
-            draw 10 of dust using dustOption(rgb(255, 150, 0), 1) at {_pLoc}
-            draw 5 of dust using dustOption(rgb(255, 50, 0), 1) at {_pLoc}
 
-            # Every 40 ticks (2 seconds) fire a beam at a random nearby enemy
-            if {_ticks} mod 40 = 0:
-                set {_target} to (random element out of (players in radius {@beam_range} of {_p}) where [input is not {_p}])
+        # 🌊 PULSE
+        set {_pulse} to 2.5 + (sin({_ticks} * 5) * 0.5)
 
-                if {_target} is set:
-                    # Draw a beam of particles from the sun down to the target
-                    set {_beamStart} to location of {_sun}
-                    set {_beamEnd} to location of {_target}
+        # 🔊 AMBIENT (every 10 ticks)
+        if {_ticks} - (10 * floor({_ticks} / 10)) = 0:
+            play sound "entity.blaze.burn" at {_sunLoc}
+            play sound "block.fire.ambient" at {_sunLoc}
 
-                    set {_bX} to (x-coordinate of {_beamEnd}) - (x-coordinate of {_beamStart})
-                    set {_bY} to (y-coordinate of {_beamEnd}) - (y-coordinate of {_beamStart})
-                    set {_bZ} to (z-coordinate of {_beamEnd}) - (z-coordinate of {_beamStart})
+        # 🌞 CORE
+        loop 80 times:
+            set {_r} to random number between 0 and {_pulse}
+            set {_theta} to random number between 0 and 360
+            set {_phi} to random number between -90 and 90
 
-                    set {_dist} to sqrt({_bX}*{_bX} + {_bY}*{_bY} + {_bZ}*{_bZ})
-                    set {_steps} to round({_dist} * 2)
+            set {_x} to {_r} * cos({_phi}) * cos({_theta})
+            set {_y} to {_r} * sin({_phi})
+            set {_z} to {_r} * cos({_phi}) * sin({_theta})
 
-                    set {_i} to 0
-                    while {_i} < {_steps}:
-                        set {_t} to {_i} / {_steps}
-                        set {_iLoc} to location of {_sun}
-                        add ({_bX} * {_t}) to x-coordinate of {_iLoc}
-                        add ({_bY} * {_t}) to y-coordinate of {_iLoc}
-                        add ({_bZ} * {_t}) to z-coordinate of {_iLoc}
-                        draw 3 of dust using dustOption(rgb(255, 100, 0), 1) at {_iLoc}
-                        draw 2 of dust using dustOption(rgb(255, 255, 0), 1) at {_iLoc}
-                        add 1 to {_i}
+            set {_loc} to {_sunLoc}
+            add {_x} to x-coordinate of {_loc}
+            add {_y} to y-coordinate of {_loc}
+            add {_z} to z-coordinate of {_loc}
 
-                    # Deal damage and ignite target
-                    damage {_target} by {@beam_damage}
-                    ignite {_target} for {@ignite_duration}
-                    draw 40 of dust using dustOption(rgb(255, 50, 0), 1) at location of {_target}
-                    play sound "entity.blaze.shoot" at location of {_target} for {_target}
-                    play sound "entity.blaze.shoot" at location of {_target} for {_p}
+            draw 1 of dust using dustOption(rgb(255,200,50), 1.2) at {_loc}
 
-                    send action bar "&6&l[☀] &cYou have been struck by the Cruel Sun!" to {_target}
-                    send action bar "&6&l[☀] &6Beam fired at &f%name of {_target}%&6!" to {_p}
+        # 🌞 OUTER SHELL
+        loop 40 times:
+            set {_theta2} to random number between 0 and 360
+            set {_phi2} to random number between -90 and 90
 
-            add 1 to {_ticks}
-            wait 1 tick
+            set {_x2} to {_pulse} * cos({_phi2}) * cos({_theta2})
+            set {_y2} to {_pulse} * sin({_phi2})
+            set {_z2} to {_pulse} * cos({_phi2}) * sin({_theta2})
 
-    # ---- SUN EXPIRES ----
-    # Final explosion burst
-    draw 200 of dust using dustOption(rgb(255, 150, 0), 1) at location of {_sun}
-    draw 100 of dust using dustOption(rgb(255, 255, 0), 1) at location of {_sun}
-    draw 100 of dust using dustOption(white, 1) at location of {_sun}
-    play sound "entity.generic.explode" at location of {_sun} for {_p}
-    play sound "entity.ghast.death" at location of {_sun} for {_p}
-    strike lightning effect at location of {_sun}
+            set {_loc2} to {_sunLoc}
+            add {_x2} to x-coordinate of {_loc2}
+            add {_y2} to y-coordinate of {_loc2}
+            add {_z2} to z-coordinate of {_loc2}
 
-    # Remove the fireball
-    kill {_sun}
+            draw 1 of dust using dustOption(rgb(255,140,0), 1) at {_loc2}
 
-    # Cleanup
+        # ☄️ FLARES
+        if random integer between 1 and 8 = 1:
+            play sound "entity.blaze.shoot" at {_sunLoc}
+            play sound "entity.firework_rocket.blast" at {_sunLoc}
+
+        # 🔥 HEAT AURA
+        loop players in radius 6 of {_sunLoc}:
+            if loop-player is not {_p}:
+                damage loop-player by 1
+                ignite loop-player for 1 second
+                play sound "entity.player.hurt_on_fire" at loop-player
+
+        # 💚 HEALING BEAM SHOTS
+        
+        set {_m2} to {_ticks}
+        remove (20 * floor({_ticks} / 20)) from {_m2} # every 20 ticks (~1 sec)
+
+        if {_m2} = 0:
+            play sound "block.beacon.power_select" at {_sunLoc}
+            play sound "entity.evoker.cast_spell" at {_sunLoc}
+
+            set {_start} to {_sunLoc}
+            set {_end} to location of {_p}
+
+            set {_dx} to x of {_end} - x of {_start}
+            set {_dy} to y of {_end} - y of {_start}
+            set {_dz} to z of {_end} - z of {_start}
+
+            set {_dist} to sqrt({_dx}^2 + {_dy}^2 + {_dz}^2)
+            set {_steps} to {_dist} * 2
+
+            loop {_steps} times:
+                set {_t} to loop-number / {_steps}
+
+                set {_beamLoc} to {_start}
+                add {_dx} * {_t} to x-coordinate of {_beamLoc}
+                add {_dy} * {_t} to y-coordinate of {_beamLoc}
+                add {_dz} * {_t} to z-coordinate of {_beamLoc}
+
+                # 🌿 Main green beam
+                draw 6 of dust using dustOption(rgb(0,255,100), 1.5) at {_beamLoc}
+
+                # ✨ Glow layer
+                draw 3 of dust using dustOption(rgb(150,255,150), 1.2) at {_beamLoc}
+
+            # 💚 Heal on impact
+            heal {_p} by 2
+
+            # ✨ Impact burst on player
+            loop 20 times:
+                set {_angle} to random number between 0 and 360
+                set {_radius} to random number between 0 and 1
+
+                set {_x} to cos({_angle}) * {_radius}
+                set {_z} to sin({_angle}) * {_radius}
+
+
+            play sound "entity.player.levelup" at {_p}
+
+        # 💥 BEAMS
+        set {_m} to {_ticks}
+        remove (40 * floor({_ticks} / 40)) from {_m}
+
+        if {_m} = 0:
+            play sound "block.beacon.ambient" at {_sunLoc}
+
+            set {_targets::*} to players in radius {@beam_range} of {_p}
+            remove {_p} from {_targets::*}
+
+            if size of {_targets::*} > 0:
+                set {_target} to random element out of {_targets::*}
+
+                play sound "entity.blaze.shoot" at {_sunLoc}
+
+                set {_start} to {_sunLoc}
+                set {_end} to location of {_target}
+
+                set {_dx} to x of {_end} - x of {_start}
+                set {_dy} to y of {_end} - y of {_start}
+                set {_dz} to z of {_end} - z of {_start}
+
+                set {_dist} to sqrt({_dx}^2 + {_dy}^2 + {_dz}^2)
+                set {_steps} to {_dist} * 2
+
+                loop {_steps} times:
+                    set {_t} to loop-number / {_steps}
+
+                    set {_beamLoc} to {_start}
+                    add {_dx} * {_t} to x-coordinate of {_beamLoc}
+                    add {_dy} * {_t} to y-coordinate of {_beamLoc}
+                    add {_dz} * {_t} to z-coordinate of {_beamLoc}
+
+                    draw 6 of dust using dustOption(rgb(255,100,0), 1.5) at {_beamLoc}
+                    draw 4 of dust using dustOption(rgb(255,255,0), 1.2) at {_beamLoc}
+
+                damage {_target} by {@beam_damage}
+                ignite {_target} for {@ignite_duration}
+
+                play sound "entity.generic.explode" at location of {_target}
+                play sound "entity.dragon_fireball.explode" at location of {_target}
+
+        add 1 to {_ticks}
+        wait 1 tick
+
+    # 💀 FINAL NUKE
+    play sound "entity.lightning_bolt.thunder" at {_sunLoc}
+
+    loop 100 times:
+        set {_angle} to random number between 0 and 360
+        set {_pitch} to random number between -90 and 90
+        set {_dist} to random number between 1 and 8
+
+        set {_x} to cos({_pitch}) * cos({_angle}) * {_dist}
+        set {_y} to sin({_pitch}) * {_dist}
+        set {_z} to cos({_pitch}) * sin({_angle}) * {_dist}
+
+        set {_boom} to {_sunLoc}
+        add {_x} to x-coordinate of {_boom}
+        add {_y} to y-coordinate of {_boom}
+        add {_z} to z-coordinate of {_boom}
+
+        draw 5 of dust using dustOption(rgb(255,100,0), 1.5) at {_boom}
+
+    play sound "entity.generic.explode" at {_sunLoc}
+
     delete {cruel_sun_active::%uuid of {_p}%}
-    delete {cruel_sun_entity::%uuid of {_p}%}
 
-    send title "&6&l☀ CRUEL SUN ☀" with subtitle "&7The sun retreats..." to {_p} for 2 seconds
-    send action bar "&8&l[&6Sun Artifact&8&l] &7The Cruel Sun fades." to {_p}
-
-    # Cooldown
     set {sun_cd::%uuid of {_p}%} to true
-    wait {@cooldown}
+    wait 800 ticks
     delete {sun_cd::%uuid of {_p}%}
-    send action bar "&8&l[&6Sun Artifact&8&l] &aCruel Sun ready!" to {_p}
