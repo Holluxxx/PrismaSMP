@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["death_artifact"]
+                        "strings": ["hades_artifact"]
                     }
                 }
             }
