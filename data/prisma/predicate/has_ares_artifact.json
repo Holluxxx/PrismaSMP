@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["immense_strength_artifact"]
+                        "strings": ["ares_artifact"]
                     }
                 }
             }
