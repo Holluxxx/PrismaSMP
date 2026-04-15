@@ -1,27 +1,11 @@
-execute as @a[predicate=!prisma:has_immense_strength_artifact, predicate=!prisma:has_terra_artifact, predicate=!prisma:has_death_artifact] run attribute @s minecraft:max_health base set 20
+execute as @a[predicate=prisma:has_ares_artifact] run effect give @s minecraft:strength 1 1 false
+execute as @a[predicate=prisma:has_ares_artifact] run attribute @s minecraft:max_health base set 22
 
-execute as @a[predicate=prisma:has_immense_strength_artifact] run effect give @s minecraft:strength 1 1 false
-execute as @a[predicate=prisma:has_immense_strength_artifact] run attribute @s minecraft:max_health base set 22
+execute as @a[predicate=prisma:has_zues_artifact] run effect give @s minecraft:water_breathing 1 0 false
+execute as @a[predicate=prisma:has_zues_artifact] run effect give @s minecraft:dolphins_grace 2 1 false
 
-execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:invisibility 1 0 false
-execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:night_vision 11 0 false
-execute as @a[predicate=prisma:has_shadow_artifact] run effect give @s minecraft:speed 1 1 false
+execute as @a[predicate=prisma:has_apollo_artifact] run effect give @s minecraft:fire_resistance 1 0 false
+execute as @a[predicate=prisma:has_apollo_artifact] run effect give @s minecraft:fire_resistance 1 0 false
+execute as @a[predicate=prisma:has_apollo_artifact] run effect give @s minecraft:fire_resistance 1 0 false
 
-execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:speed 1 3 false
-execute as @a[predicate=prisma:has_wind_artifact] run effect give @s minecraft:jump_boost 1 5 false
-
-execute as @a[predicate=prisma:has_tempest_artifact] run effect give @s minecraft:water_breathing 1 0 false
-execute as @a[predicate=prisma:has_tempest_artifact] run effect give @s minecraft:dolphins_grace 2 1 false
-
-execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:fire_resistance 1 0 false
-execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:haste 1 0 false
-execute as @a[predicate=prisma:has_sun_artifact] run effect give @s minecraft:strength 1 0 false
-
-execute as @a[predicate=prisma:has_terra_artifact] run effect give @s minecraft:resistance 1 0 false
-execute as @a[predicate=prisma:has_terra_artifact] run attribute @s minecraft:max_health base set 26
-execute as @a[predicate=prisma:has_terra_artifact] run effect give @s minecraft:haste 1 0 false
-
-execute as @a[predicate=prisma:has_death_artifact] run attribute @s minecraft:max_health base set 16
-execute as @a[predicate=prisma:has_death_artifact] run effect give @s minecraft:strength 1 1 false
-
-execute as @a[predicate=prisma:has_undead_artifact] run effect give @s minecraft:strength 1 0 false
+execute as @a[predicate=prisma:has_hades_artifact] run effect give @s minecraft:strength 1 0 false
