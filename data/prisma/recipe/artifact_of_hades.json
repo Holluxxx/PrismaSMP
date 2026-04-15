@@ -13,7 +13,7 @@
         "D": "minecraft:echo_shard"
     },
     "result": {
-        "id": "minecraft:bone",
+        "id": "minecraft:dark_grey_dye",
         "components": {
             "minecraft:custom_name": {"text":"☠ Artifact of Hades ☠","italic":false,"color":"gray","bold":true},
             "minecraft:lore": [
