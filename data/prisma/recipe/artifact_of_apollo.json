@@ -12,18 +12,18 @@
         "C": "minecraft:magma_block"
     },
     "result": {
-        "id": "minecraft:honeycomb",
+        "id": "minecraft:orange_dye",
         "components": {
-            "minecraft:custom_name": {"text":"☼ Sun Artifact ☼","italic":false,"color":"red","bold":true},
+            "minecraft:custom_name": {"text":"☼ Artifact of Apollo ☼","italic":false,"color":"yellow","bold":true},
             "minecraft:lore": [
-                {"text":"Thou carries the Flame of Ambition!","italic":false,"color":"red","bold":true},
-                {"text":"The power of Sol is at your fingertips...","italic":false,"color":"dark_red","bold":false}
+                {"text":"!","italic":false,"color":"gold","bold":true},
+                {"text":"The power of Sol is at your fingertips...","italic":false,"color":"gold","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "sun_artifact"
+                    "apollo_artifact"
                 ]
             }
         }
