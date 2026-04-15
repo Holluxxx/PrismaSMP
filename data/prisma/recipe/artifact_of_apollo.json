@@ -7,9 +7,9 @@
         "CAC"
     ],
     "key": {
-        "A": "minecraft:fire_charge",
-        "B": "minecraft:netherite_block",
-        "C": "minecraft:magma_block"
+        "A": "minecraft:enchanted_golden_apple",
+        "B": "minecraft:bow",
+        "C": "minecraft:spectral_arrow"
     },
     "result": {
         "id": "minecraft:orange_dye",
