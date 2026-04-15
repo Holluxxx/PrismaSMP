@@ -15,17 +15,16 @@
     "result": {
         "id": "minecraft:fermented_spider_eye",
         "components": {
-            "minecraft:custom_name": {"text":"☬ Bloodshed Artifact ☬","italic":false,"color":"dark_red","bold":true},
+            "minecraft:custom_name": {"text":"☬ Artifact of Ares ☬","italic":false,"color":"dark_red","bold":true},
             "minecraft:lore": [
-                {"text":"Become insanely stronger when held!","italic":false,"color":"gold","bold":true},
-                {"text":"Created by the hatred of fallen kingdoms! An artifact so intense","italic":false,"color":"yellow","bold":false},
-                {"text":"it makes the user gain strength instantly!","italic":false,"color":"yellow","bold":false}
+                {"text":"Infuses the owner with the wrath of Ares!","italic":false,"color":"gold","bold":true},
+                {"text":"Born from thousands of years of warfare!","italic":false,"color":"yellow","bold":false}
             ],
             "minecraft:rarity": "epic",
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "immense_strength_artifact"
+                    "ares_artifact"
                 ]
             }
         }
