@@ -7,10 +7,10 @@
         "DBD"
     ],
     "key": {
-        "A": "minecraft:heart_of_the_sea",
-        "B": "minecraft:tide_armor_trim_smithing_template",
-        "C": "minecraft:coast_armor_trim_smithing_template",
-        "D": "minecraft:sea_lantern"
+        "A": "minecraft:nether_star",
+        "B": "minecraft:totem_of_undying",
+        "C": "minecraft:enchanted_golden_apple",
+        "D": "minecraft:lighting_rod"
     },
     "result": {
         "id": "minecraft:yellow_dye",
