@@ -6,7 +6,7 @@
             "offhand": {
                 "components": {
                     "minecraft:custom_model_data": {
-                        "strings": ["tempest_artifact"]
+                        "strings": ["zues_artifact"]
                     }
                 }
             }
