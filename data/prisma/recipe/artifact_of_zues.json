@@ -13,7 +13,7 @@
         "D": "minecraft:sea_lantern"
     },
     "result": {
-        "id": "minecraft:prismarine_shard",
+        "id": "minecraft:yellow_dye",
         "components": {
             "minecraft:custom_name": {"text":"✱ Artifact of Zues ✱","italic":false,"color":"yellow","bold":true},
             "minecraft:lore": [
