@@ -33,16 +33,13 @@ function bloodshedRoar(p: player):
     # Sound — play roar for everyone nearby
     loop all players:
         if distance between loop-player and {_p} <= {@sound_range}:
-            play sound "entity.warden.roar" with volume 2 and pitch 0.7 at loop-player
+            play sound "entity.warden.roar" at loop-player
 
     # Self buffs
     apply strength 3 to {_p} for 15 seconds
     apply darkness 1 to {_p} for 15 seconds
     draw 300 of crimson spore at location of {_p}
     draw 1 of explosion emitter at location of {_p}
-
-    send title "&4&l☬ BLOODSHED ROAR ☬" with subtitle "&cEnemies tremble before you..." to {_p} for 3 seconds
-    send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cYou unleash a savage roar!" to {_p}
 
     # Fear all nearby players
     set {_count} to 0
@@ -53,8 +50,7 @@ function bloodshedRoar(p: player):
             apply weakness 1 to loop-player for {@effect_duration}
             apply slowness 2 to loop-player for {@effect_duration}
 
-            send title "&4&l☬ BLOODSHED ROAR ☬" with subtitle "&cRUN!" to loop-player for 2 seconds
-            send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cYou have been struck with fear!" to loop-player
+            send action bar "&4&l[&c☬ Artifact of Ares ☬&4&l] &cYou have been struck with fear!" to loop-player
 
             add 1 to {_count}
 
