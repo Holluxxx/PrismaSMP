@@ -8,24 +8,24 @@ on toggle sneak:
 
     if name of player's offhand tool contains "☠ Artifact of Hades ☠":
 
-        if {lastSneak.undead::%uuid of player%} is set:
-            if difference between now and {lastSneak.undead::%uuid of player%} <= 0.5 seconds:
-                delete {lastSneak.undead::%uuid of player%}
+        if {lastSneak.hades::%uuid of player%} is set:
+            if difference between now and {lastSneak.hades::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak.hades::%uuid of player%}
                 summonArmy(player)
                 stop
 
-        set {lastSneak.undead::%uuid of player%} to now
+        set {lastSneak.hades::%uuid of player%} to now
 
 
 function summonArmy(p: player):
 
-    if {undead_cd::%uuid of {_p}%} is set:
-        if now < {undead_cd::%uuid of {_p}%}:
-            set {_t} to difference between {undead_cd::%uuid of {_p}%} and now
-            send action bar "&8&l[&0☠ Undead Artifact&8&l] &8On cooldown!" to {_p}
+    if {hades_cd::%uuid of {_p}%} is set:
+        if now < {hades_cd::%uuid of {_p}%}:
+            set {_t} to difference between {hades_cd::%uuid of {_p}%} and now
+            send action bar "&8&l[&0☠ hades Artifact&8&l] &8On cooldown!" to {_p}
             stop
 
-    set {undead_cd::%uuid of {_p}%} to now + {@cooldown}
+    set {hades_cd::%uuid of {_p}%} to now + {@cooldown}
 
     # Remove old army
     dismissArmy({_p})
@@ -38,7 +38,7 @@ function summonArmy(p: player):
     draw 200 of dust using dustOption(black, 1) at location of {_p}
     draw 100 of dust using dustOption(gray, 1) at location of {_p}
 
-    send title "&8&l☠ UNDEAD ARMY ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
+    send title "&8&l☠ hades ARMY ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
 
 
     set {_loc1} to location of {_p}
@@ -84,21 +84,21 @@ function summonArmy(p: player):
         apply fire resistance 2 to {_mob} for 99999 seconds
         apply speed 1 to {_mob} for 99999 seconds
 
-        set {undead.owner::%uuid of {_mob}%} to uuid of {_p}
-        add {_mob} to {undead.army::%uuid of {_p}%::*}
+        set {hades.owner::%uuid of {_mob}%} to uuid of {_p}
+        add {_mob} to {hades.army::%uuid of {_p}%::*}
 
-    set {undead.active::%uuid of {_p}%} to true
+    set {hades.active::%uuid of {_p}%} to true
 
     set {_pUUID} to uuid of {_p}
 
     run 1 tick later:
         wait {@despawn_time}
-        if {undead.active::%{_pUUID}%} is set:
+        if {hades.active::%{_pUUID}%} is set:
             dismissArmy({_p})
 
-    while {undead.active::%uuid of {_p}%} is set:
+    while {hades.active::%uuid of {_p}%} is set:
 
-        loop {undead.army::%uuid of {_p}%::*}:
+        loop {hades.army::%uuid of {_p}%::*}:
 
             if loop-value is alive:
 
@@ -109,13 +109,13 @@ function summonArmy(p: player):
                     add vector({_rx}, 0, {_rz}) to {_tploc}
                     teleport loop-value to {_tploc}
 
-                if {undead.target::%uuid of {_p}%} is set:
-                    set {_target} to getTarget({undead.target::%uuid of {_p}%})
+                if {hades.target::%uuid of {_p}%} is set:
+                    set {_target} to getTarget({hades.target::%uuid of {_p}%})
                     if {_target} is set:
                         set target of loop-value to {_target}
 
             else:
-                remove loop-value from {undead.army::%uuid of {_p}%::*}
+                remove loop-value from {hades.army::%uuid of {_p}%::*}
 
         wait 5 ticks
 
@@ -123,60 +123,40 @@ on damage:
     if attacker is a player:
         if name of attacker's offhand tool contains "☠ Artifact of Hades ☠":
             if victim is a player:
-                set {undead.target::%uuid of attacker%} to uuid of victim
-
-##################################################
-# PREVENT FRIENDLY FIRE
-##################################################
-
+                set {hades.target::%uuid of attacker%} to uuid of victim
 on target:
     if entity is wither skeleton:
-        if {undead.owner::%uuid of event-entity%} is set:
+        if {hades.owner::%uuid of event-entity%} is set:
             if target is a player:
-                if uuid of target is {undead.owner::%uuid of event-entity%}:
+                if uuid of target is {hades.owner::%uuid of event-entity%}:
                     cancel event
-
-##################################################
-# EXTRA SAFETY
-##################################################
 
 every 2 ticks:
     loop all wither skeletons:
-        set {_owner} to {undead.owner::%uuid of loop-entity%}
+        set {_owner} to {hades.owner::%uuid of loop-entity%}
 
         if {_owner} is set:
             if target of loop-entity is a player:
                 if "%uuid of target of loop-entity%" is "%{_owner}%":
                     clear target of loop-entity
 
-##################################################
-# DISMISS
-##################################################
-
 function dismissArmy(p: player):
 
-    delete {undead.active::%uuid of {_p}%}
-    delete {undead.target::%uuid of {_p}%}
+    delete {hades.active::%uuid of {_p}%}
+    delete {hades.target::%uuid of {_p}%}
 
-    loop {undead.army::%uuid of {_p}%::*}:
+    loop {hades.army::%uuid of {_p}%::*}:
         if loop-value is alive:
             draw 30 of dust using dustOption(gray, 1) at location of loop-value
             play sound "entity.zombie.death" with volume 1 and pitch 0.5 at loop-value
             kill loop-value
 
-    delete {undead.army::%uuid of {_p}%::*}
-
-##################################################
-# CLEANUP
-##################################################
+    delete {hades.army::%uuid of {_p}%::*}
 
 on quit:
-    if name of player's offhand tool contains "Undead Artifact":
+    if name of player's offhand tool contains "☠ Artifact of Hades ☠":
         dismissArmy(player)
 
-##################################################
-# HELPER
-#################################################
 
 function getTarget(id: text) :: player:
     loop all players:
@@ -184,5 +164,5 @@ function getTarget(id: text) :: player:
             return loop-player
 
 on death of wither skeleton:
-    if {undead.owner::%uuid of victim%} is set:
+    if {hades.owner::%uuid of victim%} is set:
         clear drops
