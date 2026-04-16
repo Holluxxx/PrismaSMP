@@ -3,7 +3,7 @@
 on toggle sneak:
     if player is not sneaking:
         stop
-    if name of player's offhand tool contains "Tempest Artifact":
+    if name of player's offhand tool contains "✱ Artifact of Zues ✱":
         if {lastSneak_storm::%uuid of player%} is set:
             if difference between now and {lastSneak_storm::%uuid of player%} <= 0.5 seconds:
                 delete {lastSneak_storm::%uuid of player%}
@@ -22,7 +22,6 @@ function stormBurst(p: player):
             strike lightning at loop-player
     set {stormcrit::%uuid of {_p}%} to true
 
-    # ---- THICK SOLID HALO ----
     set {_radius} to 3
     set {_baseHeight} to 5
 
@@ -54,7 +53,6 @@ function stormBurst(p: player):
 
     delete {stormcrit::%uuid of {_p}%}
     
-# ---- CRIT LIGHTNING ----
 on damage:
     attacker is a player
     victim is a player
@@ -62,8 +60,7 @@ on damage:
         if attacker is not on ground:
             strike lightning at victim
 
-# ---- LIGHTNING IMMUNITY (heal 1 heart) ----
 on lightning strike:
     loop all players in radius 3 around event-location:
-        if name of loop-player's offhand tool contains "Tempest Artifact":
+        if name of loop-player's offhand tool contains "✱ Artifact of Zues ✱":
             heal loop-player by 2
