@@ -14,7 +14,7 @@ on toggle sneak:
     if player is not sneaking:
         stop
 
-    if name of player's offhand tool contains "☠ Undead Artifact ☠":
+    if name of player's offhand tool contains "☠ Artifact of Hades ☠":
 
         if {lastSneak.undead::%uuid of player%} is set:
             if difference between now and {lastSneak.undead::%uuid of player%} <= 0.5 seconds:
