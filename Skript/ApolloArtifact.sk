@@ -21,8 +21,10 @@ on toggle sneak:
 
 function apolloSun(p: player):
 
-    if {sun_cd::%uuid of {_p}%} is set:
-        send action bar "&cOn cooldown!" to {_p}
+    if {sun_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to difference between {sun_cd_end::%uuid of {_p}%} and now
+        set {_secs} to ceil({_remaining} / 1000)
+        send action bar "&cOn cooldown! &7(%{_secs}%s)" to {_p}
         stop
 
     set {apollo_sun_active::%uuid of {_p}%} to true
@@ -98,7 +100,7 @@ function apolloSun(p: player):
                 play sound "entity.player.hurt_on_fire" at loop-player
         
         set {_m2} to {_ticks}
-        remove (20 * floor({_ticks} / 20)) from {_m2} # every 20 ticks (~1 sec)
+        remove (20 * floor({_ticks} / 20)) from {_m2}
 
         if {_m2} = 0:
             play sound "block.beacon.power_select" at {_sunLoc}
@@ -123,7 +125,6 @@ function apolloSun(p: player):
                 add {_dz} * {_t} to z-coordinate of {_beamLoc}
 
                 draw 6 of dust using dustOption(rgb(0,255,100), 1.5) at {_beamLoc}
-
                 draw 3 of dust using dustOption(rgb(150,255,150), 1.2) at {_beamLoc}
 
             heal {_p} by 2
@@ -134,7 +135,6 @@ function apolloSun(p: player):
 
                 set {_x} to cos({_angle}) * {_radius}
                 set {_z} to sin({_angle}) * {_radius}
-
 
             play sound "entity.player.levelup" at {_p}
 
@@ -204,6 +204,19 @@ function apolloSun(p: player):
 
     delete {apollo_sun_active::%uuid of {_p}%}
 
-    set {sun_cd::%uuid of {_p}%} to true
-    wait 800 ticks
-    delete {sun_cd::%uuid of {_p}%}
+    # Store the future timestamp when cooldown expires
+    set {sun_cd_end::%uuid of {_p}%} to now
+    add {@cooldown} to {sun_cd_end::%uuid of {_p}%}
+
+    # Countdown loop — runs every second for the duration of the cooldown
+    set {_cd_secs} to 180
+    while {_cd_secs} > 0:
+        if {sun_cd_end::%uuid of {_p}%} is not set:
+            stop
+        send action bar "&6☀ &eSun Artifact &7cooldown: &c%{_cd_secs}%s" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {sun_cd_end::%uuid of {_p}%}
+    send action bar "&6☀ &eSun Artifact &aready!" to {_p}
+    play sound "block.beacon.power_select" at {_p}
