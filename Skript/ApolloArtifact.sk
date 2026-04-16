@@ -1,9 +1,5 @@
-# ============================================
-# Sun Artifact - PrismaSMP (GOD VERSION + SOUND)
-# ============================================
-
 options:
-    cooldown: 40 seconds
+    cooldown: 180 seconds
     beam_range: 25
     beam_damage: 6
     ignite_duration: 4 seconds
@@ -25,6 +21,7 @@ on toggle sneak:
         set {lastSneak_sun::%uuid of player%} to now
 
 
+# ---- CRUEL SUN ----
 function cruelSun(p: player):
 
     if {sun_cd::%uuid of {_p}%} is set:
@@ -36,7 +33,7 @@ function cruelSun(p: player):
     apply fire resistance to {_p} for 20 seconds
     apply strength 1 to {_p} for 20 seconds
 
-    #  PRE-ACTIVATION
+    # 🌑 PRE-ACTIVATION
     play sound "entity.warden.heartbeat" at location of {_p}
     play sound "entity.ghast.warn" at location of {_p}
 
@@ -44,7 +41,7 @@ function cruelSun(p: player):
 
     wait 5 ticks
 
-    #  SUN SPAWN
+    # 🌞 SUN SPAWN
     play sound "entity.ender_dragon.growl" at location of {_p}
     play sound "entity.blaze.ambient" at location of {_p}
     play sound "block.beacon.power_select" at location of {_p}
@@ -61,15 +58,15 @@ function cruelSun(p: player):
             stop
 
 
-        # PULSE
+        # 🌊 PULSE
         set {_pulse} to 2.5 + (sin({_ticks} * 5) * 0.5)
 
-        # AMBIENT (every 10 ticks)
+        # 🔊 AMBIENT (every 10 ticks)
         if {_ticks} - (10 * floor({_ticks} / 10)) = 0:
             play sound "entity.blaze.burn" at {_sunLoc}
             play sound "block.fire.ambient" at {_sunLoc}
 
-        # CORE
+        # 🌞 CORE
         loop 80 times:
             set {_r} to random number between 0 and {_pulse}
             set {_theta} to random number between 0 and 360
@@ -86,7 +83,7 @@ function cruelSun(p: player):
 
             draw 1 of dust using dustOption(rgb(255,200,50), 1.2) at {_loc}
 
-        # OUTER SHELL
+        # 🌞 OUTER SHELL
         loop 40 times:
             set {_theta2} to random number between 0 and 360
             set {_phi2} to random number between -90 and 90
@@ -102,19 +99,19 @@ function cruelSun(p: player):
 
             draw 1 of dust using dustOption(rgb(255,140,0), 1) at {_loc2}
 
-        # FLARES
+        # ☄️ FLARES
         if random integer between 1 and 8 = 1:
             play sound "entity.blaze.shoot" at {_sunLoc}
             play sound "entity.firework_rocket.blast" at {_sunLoc}
 
-        # HEAT AURA
+        # 🔥 HEAT AURA
         loop players in radius 6 of {_sunLoc}:
             if loop-player is not {_p}:
                 damage loop-player by 1
                 ignite loop-player for 1 second
                 play sound "entity.player.hurt_on_fire" at loop-player
 
-        # HEALING BEAM SHOTS
+        # 💚 HEALING BEAM SHOTS
         
         set {_m2} to {_ticks}
         remove (20 * floor({_ticks} / 20)) from {_m2} # every 20 ticks (~1 sec)
@@ -141,16 +138,16 @@ function cruelSun(p: player):
                 add {_dy} * {_t} to y-coordinate of {_beamLoc}
                 add {_dz} * {_t} to z-coordinate of {_beamLoc}
 
-                # Main green beam
+                # 🌿 Main green beam
                 draw 6 of dust using dustOption(rgb(0,255,100), 1.5) at {_beamLoc}
 
-                # Glow layer
+                # ✨ Glow layer
                 draw 3 of dust using dustOption(rgb(150,255,150), 1.2) at {_beamLoc}
 
-            # Heal on impact
+            # 💚 Heal on impact
             heal {_p} by 2
 
-            # Impact burst on player
+            # ✨ Impact burst on player
             loop 20 times:
                 set {_angle} to random number between 0 and 360
                 set {_radius} to random number between 0 and 1
@@ -161,7 +158,7 @@ function cruelSun(p: player):
 
             play sound "entity.player.levelup" at {_p}
 
-        # BEAMS
+        # 💥 BEAMS
         set {_m} to {_ticks}
         remove (40 * floor({_ticks} / 40)) from {_m}
 
@@ -206,7 +203,7 @@ function cruelSun(p: player):
         add 1 to {_ticks}
         wait 1 tick
 
-    # FINAL EXPLOSION
+    # 💀 FINAL NUKE
     play sound "entity.lightning_bolt.thunder" at {_sunLoc}
 
     loop 100 times:
