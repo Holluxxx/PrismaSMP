@@ -14,7 +14,7 @@ on toggle sneak:
     if player is not sneaking:
         stop
 
-    if name of player's offhand tool contains "☬ Bloodshed Artifact ☬":
+    if name of player's offhand tool contains "☬ Artifact of Ares ☬":
 
         if {lastSneak.bloodshed::%uuid of player%} is set:
             if difference between now and {lastSneak.bloodshed::%uuid of player%} <= 0.5 seconds:
@@ -27,7 +27,7 @@ on toggle sneak:
 # ---- COOLDOWN CHECK + ROAR ----
 function bloodshedRoar(p: player):
     if {bloodshed_cd::%{_p}%} is set:
-        send action bar "&4&l[&c☬ Bloodshed Roar&4&l] &cOn cooldown!" to {_p}
+        send action bar "&4&l[&c☬ Artifact of Ares ☬&4&l] &cOn cooldown!" to {_p}
         stop
 
     # Sound — play roar for everyone nearby
