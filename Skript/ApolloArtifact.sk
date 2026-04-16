@@ -30,13 +30,11 @@ function apolloSun(p: player):
     apply fire resistance to {_p} for 20 seconds
     apply strength 1 to {_p} for 20 seconds
 
-    # 🌑 PRE-ACTIVATION
     play sound "entity.warden.heartbeat" at location of {_p}
     play sound "entity.ghast.warn" at location of {_p}
 
     wait 5 ticks
 
-    # 🌞 SUN SPAWN
     play sound "entity.ender_dragon.growl" at location of {_p}
     play sound "entity.blaze.ambient" at location of {_p}
     play sound "block.beacon.power_select" at location of {_p}
