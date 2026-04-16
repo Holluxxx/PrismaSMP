@@ -21,6 +21,10 @@ on toggle sneak:
 
 function apolloSun(p: player):
 
+    if {apollo_sun_active::%uuid of {_p}%} is set:
+        send action bar "&cSun already active!" to {_p}
+        stop
+
     if {sun_cd_end::%uuid of {_p}%} is set:
         set {_remaining} to difference between {sun_cd_end::%uuid of {_p}%} and now
         set {_secs} to ceil({_remaining} / 1000)
