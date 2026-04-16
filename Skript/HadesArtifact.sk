@@ -38,7 +38,7 @@ function summonArmy(p: player):
     draw 200 of dust using dustOption(black, 1) at location of {_p}
     draw 100 of dust using dustOption(gray, 1) at location of {_p}
 
-    send title "&8&l☠ UNDEAD RESURRECTION ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
+    send title "&f" with subtitle "&8&l☠ UNDEAD RESURRECTION ☠" to {_p} for 3 seconds
 
 
     set {_loc1} to location of {_p}
