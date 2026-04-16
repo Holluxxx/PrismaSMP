@@ -1,14 +1,6 @@
-# ============================================
-# Undead Artifact - PrismaSMP (FINAL FIXED)
-# ============================================
-
 options:
     cooldown: 120 seconds
     despawn_time: 30 seconds
-
-##################################################
-# DOUBLE SNEAK DETECTION
-##################################################
 
 on toggle sneak:
     if player is not sneaking:
@@ -24,13 +16,9 @@ on toggle sneak:
 
         set {lastSneak.undead::%uuid of player%} to now
 
-##################################################
-# SUMMON FUNCTION
-##################################################
 
 function summonArmy(p: player):
 
-    # ✅ TIMESTAMP COOLDOWN
     if {undead_cd::%uuid of {_p}%} is set:
         if now < {undead_cd::%uuid of {_p}%}:
             set {_t} to difference between {undead_cd::%uuid of {_p}%} and now
@@ -52,9 +40,6 @@ function summonArmy(p: player):
 
     send title "&8&l☠ UNDEAD ARMY ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
 
-    ##################################################
-    # SPAWN FORMATION
-    ##################################################
 
     set {_loc1} to location of {_p}
     add vector(2, 0, 0) to {_loc1}
@@ -75,7 +60,7 @@ function summonArmy(p: player):
 
         set {_mob} to last spawned entity
 
-        set name of {_mob} to "&8&l[&7☠ Undead&8&l] &7Servant of %name of {_p}%"
+        set name of {_mob} to "&8&l[&7☠ Fallen Soul&8&l] &7Servant of %name of {_p}%"
         set {_mob}'s max health to 40
         heal {_mob}
 
@@ -104,20 +89,12 @@ function summonArmy(p: player):
 
     set {undead.active::%uuid of {_p}%} to true
 
-    ##################################################
-    # DESPAWN (ASYNC FIX)
-    ##################################################
-
     set {_pUUID} to uuid of {_p}
 
     run 1 tick later:
         wait {@despawn_time}
         if {undead.active::%{_pUUID}%} is set:
             dismissArmy({_p})
-
-    ##################################################
-    # FOLLOW LOOP
-    ##################################################
 
     while {undead.active::%uuid of {_p}%} is set:
 
@@ -142,13 +119,9 @@ function summonArmy(p: player):
 
         wait 5 ticks
 
-##################################################
-# TRACK TARGET
-##################################################
-
 on damage:
     if attacker is a player:
-        if name of attacker's offhand tool contains "Undead Artifact":
+        if name of attacker's offhand tool contains "☠ Artifact of Hades ☠":
             if victim is a player:
                 set {undead.target::%uuid of attacker%} to uuid of victim
 
