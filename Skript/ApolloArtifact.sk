@@ -9,7 +9,7 @@ on toggle sneak:
     if player is not sneaking:
         stop
 
-    if name of player's offhand tool contains "Sun Artifact":
+    if name of player's offhand tool contains "☼ Artifact of Apollo ☼":
 
         if {lastSneak_sun::%uuid of player%} is set:
             if difference between now and {lastSneak_sun::%uuid of player%} <= 0.5 seconds:
@@ -213,10 +213,10 @@ function apolloSun(p: player):
     while {_cd_secs} > 0:
         if {sun_cd_end::%uuid of {_p}%} is not set:
             stop
-        send action bar "&6☀ &eSun Artifact &7cooldown: &c%{_cd_secs}%s" to {_p}
+        send action bar "&6☼ &eArtifact of Apollo ☼ &7cooldown: &c%{_cd_secs}%s" to {_p}
         remove 1 from {_cd_secs}
         wait 20 ticks
 
     delete {sun_cd_end::%uuid of {_p}%}
-    send action bar "&6☀ &eSun Artifact &aready!" to {_p}
+    send action bar "&6☀ &eArtifact of Apollo ☼ &aready!" to {_p}
     play sound "block.beacon.power_select" at {_p}
