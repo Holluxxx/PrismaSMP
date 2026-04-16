@@ -1,5 +1,3 @@
-
-# ---- DOUBLE SNEAK ----
 on toggle sneak:
     if player is not sneaking:
         stop
@@ -11,7 +9,6 @@ on toggle sneak:
                 stop
         set {lastSneak_storm::%uuid of player%} to now
         
-# ---- ABILITY ----
 function stormBurst(p: player):
     set {_p} to {_p}
     # lightning burst
@@ -29,14 +26,12 @@ function stormBurst(p: player):
         set {_center} to location of {_p}
         add {_baseHeight} to y-coordinate of {_center}
 
-        # 3 stacked rings with manual layer index
         set {_layer} to 0
         while {_layer} < 3:
             set {_layer} to {_layer} + 1
             set {_yOffset} to ({_layer} - 2) * 0.15
             set {_r} to {_radius} - (abs({_layer} - 2) * 0.15)
 
-            # 120 points = every 3 degrees
             set {_step} to 0
             while {_step} < 120:
                 set {_step} to {_step} + 1
