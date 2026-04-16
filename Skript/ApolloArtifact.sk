@@ -5,7 +5,6 @@ options:
     ignite_duration: 4 seconds
     sun_height: 15
 
-# ---- DOUBLE SNEAK ----
 on toggle sneak:
     if player is not sneaking:
         stop
@@ -15,20 +14,18 @@ on toggle sneak:
         if {lastSneak_sun::%uuid of player%} is set:
             if difference between now and {lastSneak_sun::%uuid of player%} <= 0.5 seconds:
                 delete {lastSneak_sun::%uuid of player%}
-                cruelSun(player)
+                apolloSun(player)
                 stop
 
         set {lastSneak_sun::%uuid of player%} to now
 
-
-# ---- CRUEL SUN ----
-function cruelSun(p: player):
+function apolloSun(p: player):
 
     if {sun_cd::%uuid of {_p}%} is set:
         send action bar "&cOn cooldown!" to {_p}
         stop
 
-    set {cruel_sun_active::%uuid of {_p}%} to true
+    set {apollo_sun_active::%uuid of {_p}%} to true
 
     apply fire resistance to {_p} for 20 seconds
     apply strength 1 to {_p} for 20 seconds
@@ -37,8 +34,6 @@ function cruelSun(p: player):
     play sound "entity.warden.heartbeat" at location of {_p}
     play sound "entity.ghast.warn" at location of {_p}
 
-    set time of world of {_p} to day
-
     wait 5 ticks
 
     # 🌞 SUN SPAWN
@@ -46,7 +41,7 @@ function cruelSun(p: player):
     play sound "entity.blaze.ambient" at location of {_p}
     play sound "block.beacon.power_select" at location of {_p}
 
-    send title "&6☀ CRUEL SUN ☀" with subtitle "&cThe sun awakens..." to {_p}
+    send title "&6☀ Apollo's Sun ☀" with subtitle "&cThe sun awakens..." to {_p}
 
     set {_ticks} to 0
 
@@ -54,19 +49,15 @@ function cruelSun(p: player):
     add {@sun_height} to y-coordinate of {_sunLoc}
 
     while {_ticks} < 300:
-        if {cruel_sun_active::%uuid of {_p}%} is not set:
+        if {apollo_sun_active::%uuid of {_p}%} is not set:
             stop
 
-
-        # 🌊 PULSE
         set {_pulse} to 2.5 + (sin({_ticks} * 5) * 0.5)
 
-        # 🔊 AMBIENT (every 10 ticks)
         if {_ticks} - (10 * floor({_ticks} / 10)) = 0:
             play sound "entity.blaze.burn" at {_sunLoc}
             play sound "block.fire.ambient" at {_sunLoc}
 
-        # 🌞 CORE
         loop 80 times:
             set {_r} to random number between 0 and {_pulse}
             set {_theta} to random number between 0 and 360
@@ -83,7 +74,6 @@ function cruelSun(p: player):
 
             draw 1 of dust using dustOption(rgb(255,200,50), 1.2) at {_loc}
 
-        # 🌞 OUTER SHELL
         loop 40 times:
             set {_theta2} to random number between 0 and 360
             set {_phi2} to random number between -90 and 90
@@ -99,19 +89,15 @@ function cruelSun(p: player):
 
             draw 1 of dust using dustOption(rgb(255,140,0), 1) at {_loc2}
 
-        # ☄️ FLARES
         if random integer between 1 and 8 = 1:
             play sound "entity.blaze.shoot" at {_sunLoc}
             play sound "entity.firework_rocket.blast" at {_sunLoc}
 
-        # 🔥 HEAT AURA
         loop players in radius 6 of {_sunLoc}:
             if loop-player is not {_p}:
                 damage loop-player by 1
                 ignite loop-player for 1 second
                 play sound "entity.player.hurt_on_fire" at loop-player
-
-        # 💚 HEALING BEAM SHOTS
         
         set {_m2} to {_ticks}
         remove (20 * floor({_ticks} / 20)) from {_m2} # every 20 ticks (~1 sec)
@@ -138,16 +124,12 @@ function cruelSun(p: player):
                 add {_dy} * {_t} to y-coordinate of {_beamLoc}
                 add {_dz} * {_t} to z-coordinate of {_beamLoc}
 
-                # 🌿 Main green beam
                 draw 6 of dust using dustOption(rgb(0,255,100), 1.5) at {_beamLoc}
 
-                # ✨ Glow layer
                 draw 3 of dust using dustOption(rgb(150,255,150), 1.2) at {_beamLoc}
 
-            # 💚 Heal on impact
             heal {_p} by 2
 
-            # ✨ Impact burst on player
             loop 20 times:
                 set {_angle} to random number between 0 and 360
                 set {_radius} to random number between 0 and 1
@@ -158,7 +140,6 @@ function cruelSun(p: player):
 
             play sound "entity.player.levelup" at {_p}
 
-        # 💥 BEAMS
         set {_m} to {_ticks}
         remove (40 * floor({_ticks} / 40)) from {_m}
 
@@ -203,7 +184,6 @@ function cruelSun(p: player):
         add 1 to {_ticks}
         wait 1 tick
 
-    # 💀 FINAL NUKE
     play sound "entity.lightning_bolt.thunder" at {_sunLoc}
 
     loop 100 times:
@@ -224,7 +204,7 @@ function cruelSun(p: player):
 
     play sound "entity.generic.explode" at {_sunLoc}
 
-    delete {cruel_sun_active::%uuid of {_p}%}
+    delete {apollo_sun_active::%uuid of {_p}%}
 
     set {sun_cd::%uuid of {_p}%} to true
     wait 800 ticks
