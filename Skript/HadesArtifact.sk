@@ -22,7 +22,7 @@ function summonArmy(p: player):
     if {hades_cd::%uuid of {_p}%} is set:
         if now < {hades_cd::%uuid of {_p}%}:
             set {_t} to difference between {hades_cd::%uuid of {_p}%} and now
-            send action bar "&8&l[&0☠ hades Artifact&8&l] &8On cooldown!" to {_p}
+            send action bar "&8&l[&0☠ Artifact of Hades ☠&8&l] &8On cooldown!" to {_p}
             stop
 
     set {hades_cd::%uuid of {_p}%} to now + {@cooldown}
@@ -38,7 +38,7 @@ function summonArmy(p: player):
     draw 200 of dust using dustOption(black, 1) at location of {_p}
     draw 100 of dust using dustOption(gray, 1) at location of {_p}
 
-    send title "&8&l☠ hades ARMY ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
+    send title "&8&l☠ UNDEAD RESURRECTION ☠" with subtitle "&7The dead rise..." to {_p} for 3 seconds
 
 
     set {_loc1} to location of {_p}
