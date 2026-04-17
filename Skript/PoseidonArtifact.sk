@@ -1,0 +1,13 @@
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "☼ Artifact of Apollo ☼":
+
+        if {lastSneak_sun::%uuid of player%} is set:
+            if difference between now and {lastSneak_sun::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_sun::%uuid of player%}
+                apolloSun(player)
+                stop
+
+        set {lastSneak_sun::%uuid of player%} to now
