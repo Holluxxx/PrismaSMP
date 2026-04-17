@@ -3,7 +3,7 @@
     "entity": "this",
     "predicate": {
         "equipment": {
-            "offhand": {
+            "mainhand": {
                 "components": {
                     "minecraft:custom_model_data": {
                         "strings": ["poseidon_artifact"]
