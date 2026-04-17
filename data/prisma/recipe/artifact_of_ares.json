@@ -13,7 +13,7 @@
         "D": "minecraft:wither_rose"
     },
     "result": {
-        "id": "minecraft:fermented_spider_eye",
+        "id": "minecraft:red_dye",
         "components": {
             "minecraft:custom_name": {"text":"☬ Artifact of Ares ☬","italic":false,"color":"dark_red","bold":true},
             "minecraft:lore": [
