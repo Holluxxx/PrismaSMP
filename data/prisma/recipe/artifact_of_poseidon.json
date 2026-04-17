@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CAC",
+        "DBD",
+        "CAC"
+    ],
+    "key": {
+        "A": "minecraft:heart_of_the_sea",
+        "B": "minecraft:trident",
+        "C": "minecraft:nautilus_shell",
+        "D": "minecraft:tide_armor_trim_smithing_template"
+    },
+    "result": {
+        "id": "minecraft:cyan_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"⟐ Artifact of Poseidon ⟐","italic":false,"color":"yellow","bold":true},
+            "minecraft:lore": [
+                {"text":"A heirloom from the ocean!","italic":false,"color":"gold","bold":true},
+                {"text":"Once held at the bottom of the ocean, this artifact got shattered and spread through the seven seas!","italic":false,"color":"gold","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "poseidon_artifact"
+                ]
+            }
+        }
+    }
+}
