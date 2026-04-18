@@ -4,6 +4,7 @@ options:
     soaked_slowness: 4
     riptide_damage_bonus: 10
     particle_trail_speed: 2 ticks
+    cooldown: 90 seconds
 
 on toggle sneak:
     if player is not sneaking:
@@ -26,6 +27,11 @@ on toggle sneak:
         set {lastSneak_trident::%uuid of player%} to now
 
 function poseidonTransform(p: player):
+
+    if {trident_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to {trident_cd_remaining::%uuid of {_p}%}
+        send action bar "&cOn cooldown! &7(%{_remaining}%s)" to {_p}
+        stop
 
     if name of tool of {_p} contains "Artifact of Poseidon":
         set {artifact_source::%uuid of {_p}%} to "mainhand"
@@ -58,12 +64,18 @@ function poseidonTransform(p: player):
     poseidonWatch({_p})
 
     wait {@transform_duration}
+
+    if {trident_early_revert::%uuid of {_p}%} is set:
+        delete {trident_early_revert::%uuid of {_p}%}
+        stop
+
     poseidonRevert({_p})
 
 function poseidonWatch(p: player):
     while {trident_active::%uuid of {_p}%} is set:
         if {_p} is online:
             if name of tool of {_p} does not contain "Artifact of Poseidon":
+                set {trident_early_revert::%uuid of {_p}%} to true
                 poseidonRevert({_p})
                 stop
             wait 2 ticks
@@ -102,6 +114,21 @@ function poseidonRevert(p: player):
 
     send title "&b&l⟐ POSEIDON'S WRATH ⟐" with subtitle "&7The trident returns to the deep..." to {_p} for 2 seconds
     send action bar "&8&l[&bPoseidon&8&l] &7Trident faded." to {_p}
+
+    set {trident_cd_end::%uuid of {_p}%} to true
+    set {_cd_secs} to 90
+
+    while {_cd_secs} > 0:
+        if {trident_cd_end::%uuid of {_p}%} is not set:
+            stop
+        set {trident_cd_remaining::%uuid of {_p}%} to {_cd_secs}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {trident_cd_end::%uuid of {_p}%}
+    delete {trident_cd_remaining::%uuid of {_p}%}
+    send action bar "&b⟐ &3Artifact of Poseidon ⟐ &aready!" to {_p}
+    play sound "entity.elder_guardian.ambient" at {_p}
 
 function poseidonTrail(p: player):
     set {_trailTick} to 0
@@ -220,7 +247,6 @@ every 5 ticks:
             set offhand tool of loop-player to air
             drop {_ejected} at location of loop-player
             send action bar "&8&l[&bPoseidon&8&l] &cThe artifact refuses to enter the offhand!" to loop-player
-
 
 on drop:
     if {trident_active::%uuid of player%} is set:
