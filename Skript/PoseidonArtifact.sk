@@ -12,7 +12,7 @@ on toggle sneak:
 
     set {_mainName} to name of player's tool
     set {_hasArtifact} to false
-    if {_mainName} contains "Artifact of Poseidon":
+    if {_mainName} contains "⟐ Artifact of Poseidon ⟐":
         set {_hasArtifact} to true
     if {_hasArtifact} is true:
 
