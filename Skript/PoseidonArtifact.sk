@@ -30,7 +30,7 @@ function poseidonTransform(p: player):
 
     if {trident_cd_end::%uuid of {_p}%} is set:
         set {_remaining} to {trident_cd_remaining::%uuid of {_p}%}
-        send action bar "&cOn cooldown! &7(%{_remaining}%s)" to {_p}
+        send action bar "&cPoseidon on cooldown! &7(%{_remaining}%s)" to {_p}
         stop
 
     if name of tool of {_p} contains "Artifact of Poseidon":
