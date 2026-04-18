@@ -26,9 +26,8 @@ function apolloSun(p: player):
         stop
 
     if {sun_cd_end::%uuid of {_p}%} is set:
-        set {_remaining} to difference between {sun_cd_end::%uuid of {_p}%} and now
-        set {_secs} to ceil({_remaining} / 1000)
-        send action bar "&cOn cooldown! &7(%{_secs}%s)" to {_p}
+        set {_remaining} to {sun_cd_remaining::%uuid of {_p}%}
+        send action bar "&cApollo on cooldown! &7(%{_remaining}%s)" to {_p}
         stop
 
     set {apollo_sun_active::%uuid of {_p}%} to true
@@ -208,19 +207,18 @@ function apolloSun(p: player):
 
     delete {apollo_sun_active::%uuid of {_p}%}
 
-    # Store the future timestamp when cooldown expires
-    set {sun_cd_end::%uuid of {_p}%} to now
-    add {@cooldown} to {sun_cd_end::%uuid of {_p}%}
-
-    # Countdown loop — runs every second for the duration of the cooldown
+    # Start cooldown — track both the end time and a readable remaining seconds variable
+    set {sun_cd_end::%uuid of {_p}%} to true
     set {_cd_secs} to 180
+
     while {_cd_secs} > 0:
         if {sun_cd_end::%uuid of {_p}%} is not set:
             stop
-        send action bar "&6☼ &eArtifact of Apollo ☼ &7cooldown: &c%{_cd_secs}%s" to {_p}
+        set {sun_cd_remaining::%uuid of {_p}%} to {_cd_secs}
         remove 1 from {_cd_secs}
         wait 20 ticks
 
     delete {sun_cd_end::%uuid of {_p}%}
+    delete {sun_cd_remaining::%uuid of {_p}%}
     send action bar "&6☀ &eArtifact of Apollo ☼ &aready!" to {_p}
     play sound "block.beacon.power_select" at {_p}
