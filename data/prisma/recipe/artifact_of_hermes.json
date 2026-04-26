@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CAC",
+        "ABA",
+        "CAC"
+    ],
+    "key": {
+        "A": "minecraft:enchanted_golden_apple",
+        "B": "minecraft:bow",
+        "C": "minecraft:spectral_arrow"
+    },
+    "result": {
+        "id": "minecraft:yellow_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"⚕ Artifact of Hermes ⚕","italic":false,"color":"yellow","bold":true},
+            "minecraft:lore": [
+                {"text":"An artifact told to travel the world in seconds!","italic":false,"color":"gold","bold":true},
+                {"text":"Infused with the light from Hermes's dash!","italic":false,"color":"gold","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "hermes_artifact"
+                ]
+            }
+        }
+    }
+}
