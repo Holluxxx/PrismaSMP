@@ -3,13 +3,14 @@
     "category": "misc",
     "pattern": [
         "CAC",
-        "ABA",
+        "DBD",
         "CAC"
     ],
     "key": {
-        "A": "minecraft:enchanted_golden_apple",
-        "B": "minecraft:bow",
-        "C": "minecraft:spectral_arrow"
+        "A": "minecraft:rabbit_foot",
+        "B": "minecraft:diamond_boots",
+        "C": "minecraft:wind_charge",
+        "D": "minecraft:elytra"
     },
     "result": {
         "id": "minecraft:yellow_dye",
