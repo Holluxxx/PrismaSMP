@@ -41,7 +41,7 @@ function aresRoar(p: player):
             add 1 to {_count}
             loop 16 times:
                 if loop-player is online:
-                    play sound "entity.warden.heartbeat" with volume 1.5 and pitch 0.8 at loop-player
+                    play sound "entity.warden.heartbeat" with volume 1.5 and pitch 0.7 at loop-player
                 wait 0.5 seconds
 
     send action bar "&4&l[&c☬ Ares Roar&4&l] &cRoar struck &4%{_count}% &cenemy players!" to {_p}
