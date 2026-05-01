@@ -36,6 +36,7 @@ function poseidonTransform(p: player):
     if name of tool of {_p} contains "Artifact of Poseidon":
         set {artifact_source::%uuid of {_p}%} to "mainhand"
         set {original_item::%uuid of {_p}%} to tool of {_p}
+        set tool of {_p} to air
     else if name of offhand tool of {_p} contains "Artifact of Poseidon":
         set {artifact_source::%uuid of {_p}%} to "offhand"
         set {original_item::%uuid of {_p}%} to offhand tool of {_p}
@@ -100,10 +101,17 @@ function poseidonRevert(p: player):
             stop loop
 
     if {_restored} is false:
+        set {_offhandItem} to offhand tool of {_p}
+        if name of {_offhandItem} contains "Artifact of Poseidon":
+            set offhand tool of {_p} to {original_item::%uuid of {_p}%}
+            set {_restored} to true
+
+    if {_restored} is false:
         if {artifact_source::%uuid of {_p}%} is "offhand":
             set offhand tool of {_p} to {original_item::%uuid of {_p}%}
         else:
             give {original_item::%uuid of {_p}%} to {_p}
+
     delete {original_item::%uuid of {_p}%}
     delete {artifact_source::%uuid of {_p}%}
 
