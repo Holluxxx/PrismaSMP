@@ -25,10 +25,8 @@ function summonArmy(p: player):
         send action bar "&8&l[&0☠ Hades ☠&8&l] &8The underworld waits... &7(%{_secs}%s)" to {_p}
         stop
 
-    # Remove old army
     dismissArmy({_p})
 
-    # Effects
     loop all players:
         if distance between loop-player and {_p} <= 30:
             play sound "entity.wither.spawn" with volume 2 and pitch 0.6 at loop-player
@@ -39,13 +37,13 @@ function summonArmy(p: player):
     send title "&f" with subtitle "&8&l☠ UNDEAD RESURRECTION ☠" to {_p} for 3 seconds
 
     set {_loc1} to location of {_p}
-    add vector(2, 0, 0) to {_loc1}
+    add vector(4, 0, 0) to {_loc1}
 
     set {_loc2} to location of {_p}
-    add vector(-1, 0, 1.5) to {_loc2}
+    add vector(-2, 0, 3) to {_loc2}
 
     set {_loc3} to location of {_p}
-    add vector(-1, 0, -1.5) to {_loc3}
+    add vector(-2, 0, 3) to {_loc3}
 
     loop 3 times:
         if loop-number is 1:
@@ -80,6 +78,7 @@ function summonArmy(p: player):
 
         apply fire resistance 2 to {_mob} for 99999 seconds
         apply speed 1 to {_mob} for 99999 seconds
+        apply strength 1 to {_mob} for 99999 seconds
 
         set {hades.owner::%uuid of {_mob}%} to uuid of {_p}
         add {_mob} to {hades.army::%uuid of {_p}%::*}
