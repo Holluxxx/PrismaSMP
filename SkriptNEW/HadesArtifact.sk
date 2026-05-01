@@ -98,7 +98,7 @@ function summonArmy(p: player):
 
             if loop-value is alive:
 
-                if distance between loop-value and {_p} > 6:
+                if distance between loop-value and {_p} > 12:
                     set {_tploc} to location of {_p}
                     set {_rx} to random number between -2 and 2
                     set {_rz} to random number between -2 and 2
