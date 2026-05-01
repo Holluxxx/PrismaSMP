@@ -45,7 +45,6 @@ function aresRoar(p: player):
 
     send action bar "&4&l[&c☬ Ares Roar&4&l] &cRoar struck &4%{_count}% &cenemy players!" to {_p}
 
-    # Start cooldown — track both the end time and a readable remaining seconds variable
     set {ares_cd_end::%uuid of {_p}%} to true
     set {_cd_secs} to 180
 
