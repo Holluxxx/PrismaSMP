@@ -1,0 +1,85 @@
+options:
+    cooldown: 120 seconds
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+    if name of player's offhand tool contains "✱ Artifact of Zues ✱":
+        if {lastSneak_storm::%uuid of player%} is set:
+            if difference between now and {lastSneak_storm::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_storm::%uuid of player%}
+                stormBurst(player)
+                stop
+        set {lastSneak_storm::%uuid of player%} to now
+
+function stormBurst(p: player):
+
+    if {storm_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to difference between {storm_cd_end::%uuid of {_p}%} and now
+        set {_secs} to ceil({_remaining} / 1000)
+        send action bar "&e&l[&6✱ Zeus ✱&e&l] &eThe storm recovers... &7(%{_secs}%s)" to {_p}
+        stop
+
+    # Lightning burst
+    loop all players in radius 25 around {_p}:
+        if loop-player is not {_p}:
+            strike lightning at loop-player
+            strike lightning at loop-player
+            strike lightning at loop-player
+
+    set {stormcrit::%uuid of {_p}%} to true
+
+    set {_radius} to 3
+    set {_baseHeight} to 5
+
+    loop 500 times:
+        set {_center} to location of {_p}
+        add {_baseHeight} to y-coordinate of {_center}
+        set {_layer} to 0
+        while {_layer} < 3:
+            set {_layer} to {_layer} + 1
+            set {_yOffset} to ({_layer} - 2) * 0.15
+            set {_r} to {_radius} - (abs({_layer} - 2) * 0.15)
+            set {_step} to 0
+            while {_step} < 120:
+                set {_step} to {_step} + 1
+                set {_angle} to {_step} * 3
+                set {_x} to {_r} * sin({_angle})
+                set {_z} to {_r} * cos({_angle})
+                set {_loc} to {_center}
+                add {_x} to x-coordinate of {_loc}
+                add {_z} to z-coordinate of {_loc}
+                add {_yOffset} to y-coordinate of {_loc}
+                draw 1 of dust using dustOption(rgb(255, 255, 200), 2.5) at {_loc}
+        wait 1 tick
+
+    delete {stormcrit::%uuid of {_p}%}
+
+    # Start cooldown
+    set {storm_cd_end::%uuid of {_p}%} to now
+    add {@cooldown} to {storm_cd_end::%uuid of {_p}%}
+
+    set {_cd_secs} to 120
+    while {_cd_secs} > 0:
+        if {storm_cd_end::%uuid of {_p}%} is not set:
+            stop
+        send action bar "&e&l[&6✱ Zeus ✱&e&l] &eThe storm recovers... &7(%{_cd_secs}%s)" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {storm_cd_end::%uuid of {_p}%}
+    send action bar "&e&l[&6✱ Zeus ✱&e&l] &6Thunder strikes again!" to {_p}
+    play sound "entity.lightning_bolt.thunder" at {_p}
+
+
+on damage:
+    attacker is a player
+    victim is a player
+    if {stormcrit::%uuid of attacker%} is true:
+        if attacker is not on ground:
+            strike lightning at victim
+
+on lightning strike:
+    loop all players in radius 3 around event-location:
+        if name of loop-player's offhand tool contains "✱ Artifact of Zues ✱":
+            heal loop-player by 2

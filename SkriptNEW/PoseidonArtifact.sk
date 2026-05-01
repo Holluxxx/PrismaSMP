@@ -1,0 +1,256 @@
+options:
+    transform_duration: 15 seconds
+    soaked_duration: 6 seconds
+    soaked_slowness: 4
+    riptide_damage_bonus: 10
+    particle_trail_speed: 2 ticks
+    cooldown: 90 seconds
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    set {_mainName} to name of player's tool
+    set {_hasArtifact} to false
+    if {_mainName} contains "⟐ Artifact of Poseidon ⟐":
+        set {_hasArtifact} to true
+    if {_hasArtifact} is true:
+
+        if {lastSneak_trident::%uuid of player%} is set:
+            if difference between now and {lastSneak_trident::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_trident::%uuid of player%}
+
+                if {trident_active::%uuid of player%} is not set:
+                    poseidonTransform(player)
+                stop
+
+        set {lastSneak_trident::%uuid of player%} to now
+
+function poseidonTransform(p: player):
+
+    if {trident_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to {trident_cd_remaining::%uuid of {_p}%}
+        send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &bThe tides recede... &7(%{_remaining}%s)" to {_p}
+        stop
+
+    if name of tool of {_p} contains "Artifact of Poseidon":
+        set {artifact_source::%uuid of {_p}%} to "mainhand"
+        set {original_item::%uuid of {_p}%} to tool of {_p}
+    else if name of offhand tool of {_p} contains "Artifact of Poseidon":
+        set {artifact_source::%uuid of {_p}%} to "offhand"
+        set {original_item::%uuid of {_p}%} to offhand tool of {_p}
+        set offhand tool of {_p} to air
+
+    set tool of {_p} to a trident named "⟐ Artifact of Poseidon ⟐"
+    enchant tool of {_p} with riptide 3
+
+    set {_lore::1} to "&6&lA heirloom from the ocean!"
+    set {_lore::2} to "&6Once held at the bottom of the ocean, this artifact got shattered and spread through the seven seas!"
+    set lore of tool of {_p} to {_lore::*}
+
+    set {trident_active::%uuid of {_p}%} to true
+
+    set weather in world of {_p} to rain
+
+    draw 80 of dust using dustOption(rgb(0, 150, 255), 1) at location of {_p}
+    draw 60 of dust using dustOption(rgb(0, 200, 255), 1) at location of {_p}
+    draw 40 of dust using dustOption(white, 1) at location of {_p}
+    play sound "entity.elder_guardian.ambient" at location of {_p} for {_p}
+
+    send title "&f" with subtitle "&b&l⟐ POSEIDON'S WRATH ⟐" to {_p} for 3 seconds
+    send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &7The trident awakens..." to {_p}
+
+    poseidonTrail({_p})
+    poseidonWatch({_p})
+
+    wait {@transform_duration}
+
+    if {trident_early_revert::%uuid of {_p}%} is set:
+        delete {trident_early_revert::%uuid of {_p}%}
+        stop
+
+    poseidonRevert({_p})
+
+function poseidonWatch(p: player):
+    while {trident_active::%uuid of {_p}%} is set:
+        if {_p} is online:
+            if name of tool of {_p} does not contain "Artifact of Poseidon":
+                set {trident_early_revert::%uuid of {_p}%} to true
+                poseidonRevert({_p})
+                stop
+            wait 2 ticks
+
+function poseidonRevert(p: player):
+    if {trident_active::%uuid of {_p}%} is not set:
+        stop
+
+    delete {trident_active::%uuid of {_p}%}
+
+    loop items in inventory of {_p}:
+        if loop-item is a trident:
+            if name of loop-item contains "Artifact of Poseidon":
+                remove loop-item from inventory of {_p}
+
+    set {_restored} to false
+    loop integers from 0 to 8:
+        set {_slotItem} to slot loop-number of inventory of {_p}
+        if name of {_slotItem} contains "Artifact of Poseidon":
+            set slot loop-number of inventory of {_p} to {original_item::%uuid of {_p}%}
+            set {_restored} to true
+            stop loop
+
+    if {_restored} is false:
+        if {artifact_source::%uuid of {_p}%} is "offhand":
+            set offhand tool of {_p} to {original_item::%uuid of {_p}%}
+        else:
+            give {original_item::%uuid of {_p}%} to {_p}
+    delete {original_item::%uuid of {_p}%}
+    delete {artifact_source::%uuid of {_p}%}
+
+    set weather in world of {_p} to clear
+
+    draw 60 of dust using dustOption(rgb(0, 150, 255), 1) at location of {_p}
+    play sound "entity.elder_guardian.death" at location of {_p} for {_p}
+
+    send title "&b&l⟐ POSEIDON'S WRATH ⟐" with subtitle "&7The trident returns to the deep..." to {_p} for 2 seconds
+    send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &7Trident faded." to {_p}
+
+    set {trident_cd_end::%uuid of {_p}%} to true
+    set {_cd_secs} to 90
+
+    while {_cd_secs} > 0:
+        if {trident_cd_end::%uuid of {_p}%} is not set:
+            stop
+        set {trident_cd_remaining::%uuid of {_p}%} to {_cd_secs}
+        send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &bThe tides recede... &7(%{_cd_secs}%s)" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {trident_cd_end::%uuid of {_p}%}
+    delete {trident_cd_remaining::%uuid of {_p}%}
+    send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &bThe seas rage once more!" to {_p}
+    play sound "entity.elder_guardian.ambient" at {_p}
+
+function poseidonTrail(p: player):
+    set {_trailTick} to 0
+
+    while {trident_active::%uuid of {_p}%} is set:
+        if {_p} is online:
+
+            loop 3 times:
+                set {_arm} to (loop-number - 1) * 120
+                set {_angle} to ({_trailTick} * 25 + {_arm}) - (floor(({_trailTick} * 25 + {_arm}) / 360) * 360)
+
+                set {_loc} to location of {_p}
+                add sin({_angle}) * 1.8 to x-coordinate of {_loc}
+                add cos({_angle}) * 1.8 to z-coordinate of {_loc}
+                add 0.3 to y-coordinate of {_loc}
+                draw 6 of dust using dustOption(rgb(0, 150, 255), 1.2) at {_loc}
+                draw 3 of dust using dustOption(rgb(0, 210, 255), 1) at {_loc}
+
+                set {_loc2} to location of {_p}
+                add sin({_angle} + 15) * 1.5 to x-coordinate of {_loc2}
+                add cos({_angle} + 15) * 1.5 to z-coordinate of {_loc2}
+                add 1.0 to y-coordinate of {_loc2}
+                draw 6 of dust using dustOption(rgb(0, 180, 255), 1.2) at {_loc2}
+                draw 3 of dust using dustOption(white, 0.8) at {_loc2}
+
+                set {_loc3} to location of {_p}
+                add sin({_angle} + 30) * 1.2 to x-coordinate of {_loc3}
+                add cos({_angle} + 30) * 1.2 to z-coordinate of {_loc3}
+                add 1.8 to y-coordinate of {_loc3}
+                draw 6 of dust using dustOption(rgb(0, 150, 255), 1) at {_loc3}
+                draw 2 of dust using dustOption(white, 1) at {_loc3}
+
+            set {_spiralAngle} to ({_trailTick} * 40) - (floor(({_trailTick} * 40) / 360) * 360)
+            set {_spiralAngle2} to ({_trailTick} * 40 + 180) - (floor(({_trailTick} * 40 + 180) / 360) * 360)
+
+            loop 4 times:
+                set {_h} to loop-number * 0.5
+                set {_r} to 1.8 - (loop-number * 0.3)
+
+                set {_sloc} to location of {_p}
+                add sin({_spiralAngle} + (loop-number * 20)) * {_r} to x-coordinate of {_sloc}
+                add cos({_spiralAngle} + (loop-number * 20)) * {_r} to z-coordinate of {_sloc}
+                add {_h} to y-coordinate of {_sloc}
+                draw 5 of dust using dustOption(rgb(0, 200, 255), 1) at {_sloc}
+
+                set {_sloc2} to location of {_p}
+                add sin({_spiralAngle2} + (loop-number * 20)) * {_r} to x-coordinate of {_sloc2}
+                add cos({_spiralAngle2} + (loop-number * 20)) * {_r} to z-coordinate of {_sloc2}
+                add {_h} to y-coordinate of {_sloc2}
+                draw 5 of dust using dustOption(rgb(0, 150, 255), 1) at {_sloc2}
+
+            loop 6 times:
+                set {_gAngle} to (loop-number * 60) + ({_trailTick} * 10)
+                set {_gAngle} to {_gAngle} - (floor({_gAngle} / 360) * 360)
+
+                set {_gloc} to location of {_p}
+                add sin({_gAngle}) * 2.2 to x-coordinate of {_gloc}
+                add cos({_gAngle}) * 2.2 to z-coordinate of {_gloc}
+                add -0.1 to y-coordinate of {_gloc}
+                draw 4 of dust using dustOption(rgb(0, 100, 200), 1) at {_gloc}
+                draw 2 of dust using dustOption(rgb(0, 180, 255), 0.8) at {_gloc}
+
+            draw 10 of dust using dustOption(rgb(255, 255, 255), 0.6) at location of {_p}
+            draw 8 of dust using dustOption(rgb(0, 210, 255), 1) at location of {_p}
+
+            add 1 to {_trailTick}
+            wait {@particle_trail_speed}
+
+on damage:
+    if {trident_active::%uuid of attacker%} is set:
+        if name of attacker's tool contains "Artifact of Poseidon":
+
+            set {soaked::%uuid of victim%} to true
+            apply slowness {@soaked_slowness} to victim for {@soaked_duration}
+
+            damage victim by {@riptide_damage_bonus}
+
+            draw 80 of dust using dustOption(rgb(0, 150, 255), 1) at location of victim
+            draw 40 of dust using dustOption(white, 1) at location of victim
+            draw 30 of dust using dustOption(rgb(0, 80, 150), 1) at location of victim
+            play sound "entity.elder_guardian.hurt" at location of victim for attacker
+
+            send title "&b&l≋ SOAKED ≋" with subtitle "&7The ocean claims you..." to victim for 2 seconds
+            send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &bTarget is &3SOAKED&b!" to attacker
+
+            soakedExpiry(victim)
+
+function soakedExpiry(target: player):
+    if {soaked_ticker::%uuid of {_target}%} is set:
+        stop
+    set {soaked_ticker::%uuid of {_target}%} to true
+
+    set {_ticks} to 0
+    set {_maxTicks} to 120
+
+    while {_ticks} < {_maxTicks}:
+        if {soaked::%uuid of {_target}%} is set:
+            if {_target} is online:
+                send action bar "&3&l≋ SOAKED &8— &7Slowed by the tide... &b(%({_maxTicks} - {_ticks}) / 20%s)" to {_target}
+                draw 3 of dust using dustOption(rgb(0, 150, 255), 1) at location of {_target}
+                add 2 to {_ticks}
+                wait 2 ticks
+            else:
+                stop
+        else:
+            stop
+
+    delete {soaked::%uuid of {_target}%}
+    delete {soaked_ticker::%uuid of {_target}%}
+    send action bar "&3≋ &7Soaked wore off." to {_target}
+
+every 5 ticks:
+    loop all players:
+        if name of offhand tool of loop-player contains "Artifact of Poseidon":
+            set {_ejected} to offhand tool of loop-player
+            set offhand tool of loop-player to air
+            drop {_ejected} at location of loop-player
+            send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &cThe artifact refuses to enter the offhand!" to loop-player
+
+on drop:
+    if {trident_active::%uuid of player%} is set:
+        set {_dropped} to display name of event-item
+        if {_dropped} contains "Artifact of Poseidon":
+            cancel event

@@ -1,0 +1,183 @@
+options:
+    cooldown: 120 seconds
+    despawn_time: 30 seconds
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "☠ Artifact of Hades ☠":
+
+        if {lastSneak.hades::%uuid of player%} is set:
+            if difference between now and {lastSneak.hades::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak.hades::%uuid of player%}
+                summonArmy(player)
+                stop
+
+        set {lastSneak.hades::%uuid of player%} to now
+
+
+function summonArmy(p: player):
+
+    if {hades_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to difference between {hades_cd_end::%uuid of {_p}%} and now
+        set {_secs} to ceil({_remaining} / 1000)
+        send action bar "&8&l[&0☠ Hades ☠&8&l] &8The underworld waits... &7(%{_secs}%s)" to {_p}
+        stop
+
+    # Remove old army
+    dismissArmy({_p})
+
+    # Effects
+    loop all players:
+        if distance between loop-player and {_p} <= 30:
+            play sound "entity.wither.spawn" with volume 2 and pitch 0.6 at loop-player
+
+    draw 200 of dust using dustOption(black, 1) at location of {_p}
+    draw 100 of dust using dustOption(gray, 1) at location of {_p}
+
+    send title "&f" with subtitle "&8&l☠ UNDEAD RESURRECTION ☠" to {_p} for 3 seconds
+
+    set {_loc1} to location of {_p}
+    add vector(2, 0, 0) to {_loc1}
+
+    set {_loc2} to location of {_p}
+    add vector(-1, 0, 1.5) to {_loc2}
+
+    set {_loc3} to location of {_p}
+    add vector(-1, 0, -1.5) to {_loc3}
+
+    loop 3 times:
+        if loop-number is 1:
+            spawn wither skeleton at {_loc1}
+        else if loop-number is 2:
+            spawn wither skeleton at {_loc2}
+        else:
+            spawn wither skeleton at {_loc3}
+
+        set {_mob} to last spawned entity
+
+        set name of {_mob} to "&8&l[&7☠ Fallen Soul&8&l] &7Servant of %name of {_p}%"
+        set {_mob}'s max health to 40
+        heal {_mob}
+
+        set {_sword} to netherite sword
+        enchant {_sword} with sharpness 2
+        set {_mob}'s tool to {_sword}
+
+        set {_helmet} to netherite helmet
+        set {_chest} to netherite chestplate
+        set {_legs} to netherite leggings
+        set {_boots} to netherite boots
+        enchant {_helmet} with protection 1
+        enchant {_chest} with protection 1
+        enchant {_legs} with protection 1
+        enchant {_boots} with protection 1
+        set {_mob}'s helmet to {_helmet}
+        set {_mob}'s chestplate to {_chest}
+        set {_mob}'s leggings to {_legs}
+        set {_mob}'s boots to {_boots}
+
+        apply fire resistance 2 to {_mob} for 99999 seconds
+        apply speed 1 to {_mob} for 99999 seconds
+
+        set {hades.owner::%uuid of {_mob}%} to uuid of {_p}
+        add {_mob} to {hades.army::%uuid of {_p}%::*}
+
+    set {hades.active::%uuid of {_p}%} to true
+
+    set {_pUUID} to uuid of {_p}
+
+    run 1 tick later:
+        wait {@despawn_time}
+        if {hades.active::%{_pUUID}%} is set:
+            dismissArmy({_p})
+
+    while {hades.active::%uuid of {_p}%} is set:
+
+        loop {hades.army::%uuid of {_p}%::*}:
+
+            if loop-value is alive:
+
+                if distance between loop-value and {_p} > 6:
+                    set {_tploc} to location of {_p}
+                    set {_rx} to random number between -2 and 2
+                    set {_rz} to random number between -2 and 2
+                    add vector({_rx}, 0, {_rz}) to {_tploc}
+                    teleport loop-value to {_tploc}
+
+                if {hades.target::%uuid of {_p}%} is set:
+                    set {_target} to getTarget({hades.target::%uuid of {_p}%})
+                    if {_target} is set:
+                        set target of loop-value to {_target}
+
+            else:
+                remove loop-value from {hades.army::%uuid of {_p}%::*}
+
+        wait 5 ticks
+
+    # Army has been dismissed — start cooldown
+    set {hades_cd_end::%uuid of {_p}%} to now
+    add {@cooldown} to {hades_cd_end::%uuid of {_p}%}
+
+    # Countdown loop every second
+    set {_cd_secs} to 120
+    while {_cd_secs} > 0:
+        if {hades_cd_end::%uuid of {_p}%} is not set:
+            stop
+        send action bar "&8&l[&0☠ Hades ☠&8&l] &8The underworld waits... &7(%{_cd_secs}%s)" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {hades_cd_end::%uuid of {_p}%}
+    send action bar "&8&l[&0☠ Hades ☠&8&l] &fThe dead rise again!" to {_p}
+    play sound "block.beacon.power_select" at {_p}
+
+
+on damage:
+    if attacker is a player:
+        if name of attacker's offhand tool contains "☠ Artifact of Hades ☠":
+            if victim is a player:
+                set {hades.target::%uuid of attacker%} to uuid of victim
+
+on target:
+    if entity is wither skeleton:
+        if {hades.owner::%uuid of event-entity%} is set:
+            if target is a player:
+                if uuid of target is {hades.owner::%uuid of event-entity%}:
+                    cancel event
+
+every 2 ticks:
+    loop all wither skeletons:
+        set {_owner} to {hades.owner::%uuid of loop-entity%}
+
+        if {_owner} is set:
+            if target of loop-entity is a player:
+                if "%uuid of target of loop-entity%" is "%{_owner}%":
+                    clear target of loop-entity
+
+function dismissArmy(p: player):
+
+    delete {hades.active::%uuid of {_p}%}
+    delete {hades.target::%uuid of {_p}%}
+
+    loop {hades.army::%uuid of {_p}%::*}:
+        if loop-value is alive:
+            draw 30 of dust using dustOption(gray, 1) at location of loop-value
+            play sound "entity.zombie.death" with volume 1 and pitch 0.5 at loop-value
+            kill loop-value
+
+    delete {hades.army::%uuid of {_p}%::*}
+
+on quit:
+    if name of player's offhand tool contains "☠ Artifact of Hades ☠":
+        dismissArmy(player)
+
+function getTarget(id: text) :: player:
+    loop all players:
+        if "%uuid of loop-player%" is {_id}:
+            return loop-player
+
+on death of wither skeleton:
+    if {hades.owner::%uuid of victim%} is set:
+        clear drops
