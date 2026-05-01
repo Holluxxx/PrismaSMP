@@ -7,7 +7,7 @@ options:
 on toggle sneak:
     if player is not sneaking:
         stop
-    if name of player's offhand tool contains "Artifact of Ares":
+    if name of player's offhand tool contains "☬ Artifact of Ares ☬":
         if {lastSneak.ares::%uuid of player%} is set:
             if difference between now and {lastSneak.ares::%uuid of player%} <= 0.5 seconds:
                 delete {lastSneak.ares::%uuid of player%}
