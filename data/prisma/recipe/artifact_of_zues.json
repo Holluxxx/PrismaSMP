@@ -10,7 +10,7 @@
         "A": "minecraft:nether_star",
         "B": "minecraft:totem_of_undying",
         "C": "minecraft:enchanted_golden_apple",
-        "D": "minecraft:lighting_rod"
+        "D": "minecraft:lightning_rod"
     },
     "result": {
         "id": "minecraft:yellow_dye",
