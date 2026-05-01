@@ -7,7 +7,7 @@ options:
 on toggle sneak:
     if player is not sneaking:
         stop
-    if name of player's offhand tool contains "☬ Artifact of Ares ☬":
+    if name of player's offhand tool contains "Artifact of Ares":
         if {lastSneak.ares::%uuid of player%} is set:
             if difference between now and {lastSneak.ares::%uuid of player%} <= 0.5 seconds:
                 delete {lastSneak.ares::%uuid of player%}
@@ -17,9 +17,8 @@ on toggle sneak:
 
 function aresRoar(p: player):
     if {ares_cd_end::%uuid of {_p}%} is set:
-        set {_remaining} to difference between {ares_cd_end::%uuid of {_p}%} and now
-        set {_secs} to ceil({_remaining} / 1000)
-        send action bar "&4&l[&c☬ Artifact of Ares ☬&4&l] &cOn cooldown! &7(%{_secs}%s)" to {_p}
+        set {_remaining} to {ares_cd_remaining::%uuid of {_p}%}
+        send action bar "&cAres on cooldown! &7(%{_remaining}%s)" to {_p}
         stop
 
     loop all players:
@@ -46,19 +45,19 @@ function aresRoar(p: player):
 
     send action bar "&4&l[&c☬ Ares Roar&4&l] &cRoar struck &4%{_count}% &cenemy players!" to {_p}
 
-    # Store expiry timestamp
-    set {ares_cd_end::%uuid of {_p}%} to now
-    add {@cooldown} to {ares_cd_end::%uuid of {_p}%}
-
-    # Countdown loop every second
+    # Start cooldown — track both the end time and a readable remaining seconds variable
+    set {ares_cd_end::%uuid of {_p}%} to true
     set {_cd_secs} to 180
+
     while {_cd_secs} > 0:
         if {ares_cd_end::%uuid of {_p}%} is not set:
             stop
-        send action bar "&4&l[&c☬ Artifact of Ares ☬&4&l] &7Cooldown: &c%{_cd_secs}%s" to {_p}
+        set {ares_cd_remaining::%uuid of {_p}%} to {_cd_secs}
         remove 1 from {_cd_secs}
         wait 20 ticks
 
+        
     delete {ares_cd_end::%uuid of {_p}%}
+    delete {ares_cd_remaining::%uuid of {_p}%} 
     send action bar "&4&l[&c☬ Artifact of Ares ☬&4&l] &aReady!" to {_p}
     play sound "block.beacon.power_select" at {_p}
