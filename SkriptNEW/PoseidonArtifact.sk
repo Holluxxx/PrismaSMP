@@ -33,11 +33,11 @@ function poseidonTransform(p: player):
         send action bar "&b&l[&3⟐ Poseidon ⟐&b&l] &bThe tides recede... &7(%{_remaining}%s)" to {_p}
         stop
 
-    if name of tool of {_p} contains "Artifact of Poseidon":
+    if name of tool of {_p} contains "⟐ Artifact of Poseidon ⟐":
         set {artifact_source::%uuid of {_p}%} to "mainhand"
         set {original_item::%uuid of {_p}%} to tool of {_p}
         set tool of {_p} to air
-    else if name of offhand tool of {_p} contains "Artifact of Poseidon":
+    else if name of offhand tool of {_p} contains "⟐ Artifact of Poseidon ⟐":
         set {artifact_source::%uuid of {_p}%} to "offhand"
         set {original_item::%uuid of {_p}%} to offhand tool of {_p}
         set offhand tool of {_p} to air
@@ -75,7 +75,7 @@ function poseidonTransform(p: player):
 function poseidonWatch(p: player):
     while {trident_active::%uuid of {_p}%} is set:
         if {_p} is online:
-            if name of tool of {_p} does not contain "Artifact of Poseidon":
+            if name of tool of {_p} does not contain "⟐ Artifact of Poseidon ⟐":
                 set {trident_early_revert::%uuid of {_p}%} to true
                 poseidonRevert({_p})
                 stop
@@ -89,20 +89,20 @@ function poseidonRevert(p: player):
 
     loop items in inventory of {_p}:
         if loop-item is a trident:
-            if name of loop-item contains "Artifact of Poseidon":
+            if name of loop-item contains "⟐ Artifact of Poseidon ⟐":
                 remove loop-item from inventory of {_p}
 
     set {_restored} to false
     loop integers from 0 to 8:
         set {_slotItem} to slot loop-number of inventory of {_p}
-        if name of {_slotItem} contains "Artifact of Poseidon":
+        if name of {_slotItem} contains "⟐ Artifact of Poseidon ⟐":
             set slot loop-number of inventory of {_p} to {original_item::%uuid of {_p}%}
             set {_restored} to true
             stop loop
 
     if {_restored} is false:
         set {_offhandItem} to offhand tool of {_p}
-        if name of {_offhandItem} contains "Artifact of Poseidon":
+        if name of {_offhandItem} contains "⟐ Artifact of Poseidon ⟐":
             set offhand tool of {_p} to {original_item::%uuid of {_p}%}
             set {_restored} to true
 
@@ -208,7 +208,7 @@ function poseidonTrail(p: player):
 
 on damage:
     if {trident_active::%uuid of attacker%} is set:
-        if name of attacker's tool contains "Artifact of Poseidon":
+        if name of attacker's tool contains "⟐ Artifact of Poseidon ⟐":
 
             set {soaked::%uuid of victim%} to true
             apply slowness {@soaked_slowness} to victim for {@soaked_duration}
@@ -251,7 +251,7 @@ function soakedExpiry(target: player):
 
 every 5 ticks:
     loop all players:
-        if name of offhand tool of loop-player contains "Artifact of Poseidon":
+        if name of offhand tool of loop-player contains "⟐ Artifact of Poseidon ⟐":
             set {_ejected} to offhand tool of loop-player
             set offhand tool of loop-player to air
             drop {_ejected} at location of loop-player
@@ -260,5 +260,5 @@ every 5 ticks:
 on drop:
     if {trident_active::%uuid of player%} is set:
         set {_dropped} to display name of event-item
-        if {_dropped} contains "Artifact of Poseidon":
+        if {_dropped} contains "⟐ Artifact of Poseidon ⟐":
             cancel event
