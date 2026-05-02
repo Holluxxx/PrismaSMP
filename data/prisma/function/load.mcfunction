@@ -5,3 +5,4 @@ execute as @a run recipe give @a prisma:artifact_of_hades
 execute as @a run recipe give @a prisma:artifact_of_poseidon
 execute as @a run recipe give @a prisma:artifact_of_hermes
 execute as @a run recipe give @a prisma:artifact_of_demeter
+execute as @a run recipe give @a prisma:artifact_of_artemis
