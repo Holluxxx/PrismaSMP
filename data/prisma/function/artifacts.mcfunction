@@ -14,3 +14,5 @@ execute as @a[predicate=prisma:has_demeter_artifact] run effect give @s minecraf
 
 execute as @a[predicate=prisma:has_hermes_artifact] run effect give @s minecraft:speed 1 1 false
 execute as @a[predicate=prisma:has_hermes_artifact] run effect give @s minecraft:haste 1 0 false
+
+execute as @a[predicate=prisma:has_artemis_artifact] run effect give @s minecraft:night_vision 14 0 false
