@@ -1,0 +1,31 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CAC",
+        "ABA",
+        "CAC"
+    ],
+    "key": {
+        "A": "minecraft:cactus_flower",
+        "B": "minecraft:enchanted_golden_apple",
+        "C": "minecraft:deepslate_emerald_ore"
+    },
+    "result": {
+        "id": "minecraft:orange_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"✿ Artifact of Demeter ✿","italic":false,"color":"green","bold":true},
+            "minecraft:lore": [
+                {"text":"A Rune of Vitality and Nature!","italic":false,"color":"dark_green","bold":true},
+                {"text":"Born of good fortune and the heart of the deepest groves.","italic":false,"color":"dark_green","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "demeter_artifact"
+                ]
+            }
+        }
+    }
+}
