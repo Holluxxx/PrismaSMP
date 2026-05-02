@@ -1,0 +1,32 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+        "CAC",
+        "DBD",
+        "CAC"
+    ],
+    "key": {
+        "A": "minecraft:netherite_ingot",
+        "B": "minecraft:bow",
+        "C": "minecraft:mossy_cobblestone",
+        "D": "minecraft:wild_armor_trim_smithing_template"
+    },
+    "result": {
+        "id": "minecraft:green_dye",
+        "components": {
+            "minecraft:custom_name": {"text":"✿ Artifact of Artemis ✿","italic":false,"color":"green","bold":true},
+            "minecraft:lore": [
+                {"text":"An Artifact of the Hunt!","italic":false,"color":"dark_green","bold":true},
+                {"text":"Crafted in the quiet of the wild and the glow of the moon.","italic":false,"color":"dark_green","bold":false}
+            ],
+            "minecraft:rarity": "epic",
+            "minecraft:enchantment_glint_override": true,
+            "minecraft:custom_model_data": {
+                "strings": [
+                    "artemis_artifact"
+                ]
+            }
+        }
+    }
+}
