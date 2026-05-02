@@ -2,7 +2,7 @@ options:
     transform_duration: 15 seconds
     soaked_duration: 6 seconds
     soaked_slowness: 4
-    riptide_damage_bonus: 10
+    riptide_damage_bonus: 8
     particle_trail_speed: 2 ticks
     cooldown: 90 seconds
 
