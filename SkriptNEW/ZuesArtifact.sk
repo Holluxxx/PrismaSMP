@@ -20,7 +20,6 @@ function stormBurst(p: player):
         send action bar "&e&l[&6✱ Zeus ✱&e&l] &eThe storm recovers... &7(%{_secs}%s)" to {_p}
         stop
 
-    # Lightning burst
     loop all players in radius 25 around {_p}:
         if loop-player is not {_p}:
             strike lightning at loop-player
@@ -55,7 +54,6 @@ function stormBurst(p: player):
 
     delete {stormcrit::%uuid of {_p}%}
 
-    # Start cooldown
     set {storm_cd_end::%uuid of {_p}%} to now
     add {@cooldown} to {storm_cd_end::%uuid of {_p}%}
 
@@ -82,4 +80,4 @@ on damage:
 on lightning strike:
     loop all players in radius 3 around event-location:
         if name of loop-player's offhand tool contains "✱ Artifact of Zues ✱":
-            heal loop-player by 2
+            heal loop-player by 3
