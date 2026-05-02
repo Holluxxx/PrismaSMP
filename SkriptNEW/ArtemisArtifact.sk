@@ -3,7 +3,7 @@ options:
     marked_duration: 6 seconds
     marked_slowness: 2
     marked_weakness: 1
-    arrow_damage_bonus: 6
+    arrow_damage_bonus: 3
     particle_trail_speed: 2 ticks
     cooldown: 150 seconds
 
