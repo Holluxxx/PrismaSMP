@@ -23,7 +23,9 @@ function stormBurst(p: player):
     loop all players in radius 25 around {_p}:
         if loop-player is not {_p}:
             strike lightning at loop-player
+            wait 0.7 seconds
             strike lightning at loop-player
+            wait 0.7 seconds
             strike lightning at loop-player
 
     set {stormcrit::%uuid of {_p}%} to true
