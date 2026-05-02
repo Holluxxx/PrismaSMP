@@ -1,0 +1,234 @@
+options:
+    transform_duration: 15 seconds
+    marked_duration: 6 seconds
+    marked_slowness: 2
+    marked_weakness: 1
+    arrow_damage_bonus: 10
+    particle_trail_speed: 2 ticks
+    cooldown: 10 seconds
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    set {_mainName} to name of player's tool
+    set {_hasArtifact} to false
+    if {_mainName} contains "🌙 Artifact of Artemis 🌙":
+        set {_hasArtifact} to true
+    if {_hasArtifact} is true:
+
+        if {lastSneak_bow::%uuid of player%} is set:
+            if difference between now and {lastSneak_bow::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_bow::%uuid of player%}
+
+                if {bow_active::%uuid of player%} is not set:
+                    artemisTransform(player)
+                stop
+
+        set {lastSneak_bow::%uuid of player%} to now
+
+
+function artemisTransform(p: player):
+
+    if {bow_cd_end::%uuid of {_p}%} is set:
+        set {_remaining} to {bow_cd_remaining::%uuid of {_p}%}
+        send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &dThe hunt rests... &7(%{_remaining}%s)" to {_p}
+        stop
+
+    set {_main} to tool of {_p}
+    set {_off} to offhand tool of {_p}
+
+    if name of {_main} contains "🌙 Artifact of Artemis 🌙":
+        set {artifact_source::%uuid of {_p}%} to "mainhand"
+        set {original_item::%uuid of {_p}%} to {_main}
+        set tool of {_p} to air
+
+    else if name of {_off} contains "🌙 Artifact of Artemis 🌙":
+        set {artifact_source::%uuid of {_p}%} to "offhand"
+        set {original_item::%uuid of {_p}%} to {_off}
+        set offhand tool of {_p} to air
+
+    set {_bow} to a bow named "🌙 Artifact of Artemis 🌙"
+    enchant {_bow} with power 8
+    set lore of {_bow} to "&d&lThe Moonlight Hunter's Relic" and "&7Every arrow seeks its prey."
+
+    set tool of {_p} to {_bow}
+
+    set {artemis_active::%uuid of {_p}%} to true
+
+    set time in world of {_p} to night
+
+    send title "&f" with subtitle "&d&lARTEMIS AWAKENS" to {_p} for 3 seconds
+    send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &7The hunt begins..." to {_p}
+
+    apply speed 2 to {_p} for {@transform_duration}
+
+    artemisTrail({_p})
+    artemisWatch({_p})
+
+    wait {@transform_duration}
+
+    if {artemis_early_revert::%uuid of {_p}%} is set:
+        delete {artemis_early_revert::%uuid of {_p}%}
+        stop
+
+    artemisRevert({_p})
+
+
+function artemisWatch(p: player):
+    while {artemis_active::%uuid of {_p}%} is set:
+        if {_p} is online:
+            if name of tool of {_p} does not contain "🌙 Artifact of Artemis 🌙":
+                set {artemis_early_revert::%uuid of {_p}%} to true
+                artemisRevert({_p})
+                stop
+        wait 2 ticks
+
+
+function artemisRevert(p: player):
+
+    if {artemis_active::%uuid of {_p}%} is not set:
+        stop
+
+    delete {artemis_active::%uuid of {_p}%}
+
+    loop items in inventory of {_p}:
+        if loop-item is a bow:
+            if name of loop-item contains "🌙 Artifact of Artemis 🌙":
+                remove loop-item from inventory of {_p}
+
+    set {_restored} to false
+
+    loop integers from 0 to 8:
+        set {_slotItem} to slot loop-number of inventory of {_p}
+        if name of {_slotItem} contains "🌙 Artifact of Artemis 🌙":
+            set slot loop-number of inventory of {_p} to {original_item::%uuid of {_p}%}
+            set {_restored} to true
+            stop loop
+
+    if {_restored} is false:
+        if {artifact_source::%uuid of {_p}%} is "offhand":
+            set offhand tool of {_p} to {original_item::%uuid of {_p}%}
+        else:
+            give {original_item::%uuid of {_p}%} to {_p}
+
+    delete {original_item::%uuid of {_p}%}
+    delete {artifact_source::%uuid of {_p}%}
+
+    set time in world of {_p} to day
+
+    draw 60 of dust using dustOption(rgb(200, 180, 255), 1) at location of {_p}
+    play sound "entity.fox.death" at location of {_p} for {_p}
+
+    send title "&d&lARTEMIS ENDS HUNT" with subtitle "&7The prey escapes the moonlight..." to {_p} for 2 seconds
+    send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &7Hunt faded." to {_p}
+
+    set {bow_cd_end::%uuid of {_p}%} to true
+    set {_cd_secs} to 10
+
+    while {_cd_secs} > 0:
+        if {bow_cd_end::%uuid of {_p}%} is not set:
+            stop
+        set {bow_cd_remaining::%uuid of {_p}%} to {_cd_secs}
+        send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &dThe hunt rests... &7(%{_cd_secs}%s)" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {bow_cd_end::%uuid of {_p}%}
+    delete {bow_cd_remaining::%uuid of {_p}%}
+    send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &5The moonlight calls again!" to {_p}
+    play sound "entity.fox.ambient" at {_p}
+
+
+function artemisTrail(p: player):
+    set {_tick} to 0
+
+    while {artemis_active::%uuid of {_p}%} is set:
+        if {_p} is online:
+
+            set {_loc} to location of {_p}
+
+            draw 6 of dust using dustOption(rgb(200, 180, 255), 1) at {_loc}
+            draw 3 of dust using dustOption(white, 0.8) at {_loc}
+
+            set {_angle} to {_tick} * 25
+
+            set {_orbit} to {_loc}
+            add sin({_angle}) * 1.5 to x-coordinate of {_orbit}
+            add cos({_angle}) * 1.5 to z-coordinate of {_orbit}
+            add 1 to y-coordinate of {_orbit}
+            draw 4 of dust using dustOption(rgb(180, 120, 255), 1) at {_orbit}
+
+            add 1 to {_tick}
+            wait {@particle_trail_speed}
+        else:
+            stop
+
+
+on damage:
+    if attacker is a player:
+        if name of attacker's tool contains "🌙 Artifact of Artemis 🌙":
+
+            if damage cause is projectile:
+
+                set {marked::%uuid of victim%} to true
+                apply slowness {@marked_slowness} to victim for {@marked_duration}
+                apply weakness {@marked_weakness} to victim for {@marked_duration}
+
+                damage victim by {@arrow_damage_bonus}
+
+                draw 80 of dust using dustOption(rgb(180, 120, 255), 1) at location of victim
+                draw 40 of dust using dustOption(white, 1) at location of victim
+
+                play sound "entity.fox.hurt" at location of victim for attacker
+
+                send subtitle "&d&l🎯 MARKED 🎯" to victim for 2 seconds
+                send action bar "&d&l[&5🌙 Artemis 🌙&d&l] &dPrey marked!" to attacker
+
+                artemisMarkedExpiry(victim)
+
+
+function artemisMarkedExpiry(target: player):
+    if {marked_ticker::%uuid of {_target}%} is set:
+        stop
+
+    set {marked_ticker::%uuid of {_target}%} to true
+
+    set {_ticks} to 0
+    set {_maxTicks} to 120
+
+    while {_ticks} < {_maxTicks}:
+        if {marked::%uuid of {_target}%} is set:
+            if {_target} is online:
+                send action bar "&d&l🎯 MARKED &8— &7You are hunted... &d(%({_maxTicks} - {_ticks}) / 20%s)" to {_target}
+                draw 3 of dust using dustOption(rgb(200, 150, 255), 1) at location of {_target}
+                add 2 to {_ticks}
+                wait 2 ticks
+            else:
+                stop
+        else:
+            stop
+
+    delete {marked::%uuid of {_target}%}
+    delete {marked_ticker::%uuid of {_target}%}
+    send action bar "&7🎯 The hunt fades..." to {_target}
+
+on shoot:
+    if shooter is not a player:
+        stop
+
+    set {_p} to shooter
+
+    if name of tool of {_p} does not contain "🌙 Artifact of Artemis 🌙":
+        stop
+
+    set {_arrow} to projectile
+
+    wait 1 tick
+
+    if {fastbow::%{_arrow}%} is set:
+        stop
+    set {fastbow::%{_arrow}%} to true
+
+    set {_v} to velocity of {_arrow}
+    set velocity of {_arrow} to {_v} * 1.35
