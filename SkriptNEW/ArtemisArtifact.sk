@@ -5,7 +5,7 @@ options:
     marked_weakness: 1
     arrow_damage_bonus: 10
     particle_trail_speed: 2 ticks
-    cooldown: 10 seconds
+    cooldown: 150 seconds
 
 on toggle sneak:
     if player is not sneaking:
