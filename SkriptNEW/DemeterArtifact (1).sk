@@ -1,0 +1,140 @@
+options:
+    cooldown: 180 seconds
+    spirit_duration: 25 seconds
+    spirit_range: 5
+    regen_duration: 8 seconds
+    growth_interval: 20 ticks
+
+on toggle sneak:
+    if player is not sneaking:
+        stop
+
+    if name of player's offhand tool contains "✿ Demeter Artifact ✿":
+
+        if {lastSneak_demeter::%uuid of player%} is set:
+            if difference between now and {lastSneak_demeter::%uuid of player%} <= 0.5 seconds:
+                delete {lastSneak_demeter::%uuid of player%}
+
+                if {demeter_active::%uuid of player%} is not set:
+                    demeterSpirits(player)
+                stop
+
+        set {lastSneak_demeter::%uuid of player%} to now
+
+function demeterSpirits(p: player):
+    if {demeter_cd::%uuid of {_p}%} is set:
+        set {_remaining} to {demeter_cd_remaining::%uuid of {_p}%}
+        send action bar "&2&l[&a✿ Demeter ✿&2&l] &aThe earth still blooms... &7(%{_remaining}%s)" to {_p}
+        stop
+
+    set {demeter_active::%uuid of {_p}%} to true
+
+    loop players in radius {@spirit_range} of {_p}:
+        spiritHeal(loop-player, {_p})
+        draw 40 of dust using dustOption(rgb(100, 255, 100), 1) at location of loop-player
+        draw 20 of dust using dustOption(rgb(255, 220, 50), 1) at location of loop-player
+        if loop-player is not {_p}:
+            send action bar "&a&l✿ &aBlessed by the harvest spirits!" to loop-player
+
+    play sound "block.note_block.bell" at location of {_p} for {_p}
+    play sound "block.amethyst_block.chime" at location of {_p} for {_p}
+
+    send title "&a&l✿ HARVEST SPIRITS ✿" with subtitle "&7The earth blesses your presence..." to {_p} for 3 seconds
+    send action bar "&2&l[&a✿ Demeter ✿&2&l] &aSpirits summoned!" to {_p}
+
+    spiritParticles({_p})
+    cropGrowth({_p})
+
+    wait {@spirit_duration}
+
+    delete {demeter_active::%uuid of {_p}%}
+
+    play sound "block.grass.break" at location of {_p} for {_p}
+    send action bar "&2&l[&a✿ Demeter ✿&2&l] &7The spirits return to the earth..." to {_p}
+
+    set {demeter_cd::%uuid of {_p}%} to true
+    set {_cd_secs} to 5
+
+    while {_cd_secs} > 0:
+        if {demeter_cd::%uuid of {_p}%} is not set:
+            stop
+        set {demeter_cd_remaining::%uuid of {_p}%} to {_cd_secs}
+        send action bar "&2&l[&a✿ Demeter ✿&2&l] &aThe earth still blooms... &7(%{_cd_secs}%s)" to {_p}
+        remove 1 from {_cd_secs}
+        wait 20 ticks
+
+    delete {demeter_cd::%uuid of {_p}%}
+    delete {demeter_cd_remaining::%uuid of {_p}%}
+    send action bar "&2&l[&a✿ Demeter ✿&2&l] &2The harvest spirits awaken!" to {_p}
+    play sound "block.note_block.bell" at {_p}
+
+function spiritParticles(p: player):
+    set {_tick} to 0
+    set {_maxTicks} to 200
+
+    while {_tick} < {_maxTicks}:
+        if {demeter_active::%uuid of {_p}%} is set:
+
+            set {_s} to 0
+            while {_s} < 6:
+                set {_offset} to {_s} * 60
+                set {_angle} to ({_tick} * 8 + {_offset})
+                set {_angle} to {_angle} - (floor({_angle} / 360) * 360)
+
+                set {_radius} to 7 + (sin({_tick} * 5 + {_offset}) * 0.5)
+                set {_height} to 1 + (sin({_tick} * 4 + {_offset} * 2) * 0.8)
+
+                set {_sx} to sin({_angle}) * {_radius}
+                set {_sz} to cos({_angle}) * {_radius}
+
+                set {_spiritLoc} to location of {_p}
+                add {_sx} to x-coordinate of {_spiritLoc}
+                add {_height} to y-coordinate of {_spiritLoc}
+                add {_sz} to z-coordinate of {_spiritLoc}
+
+                if {_s} = 0:
+                    draw 8 of dust using dustOption(rgb(100, 255, 100), 1) at {_spiritLoc}
+                if {_s} = 1:
+                    draw 8 of dust using dustOption(rgb(255, 220, 50), 1) at {_spiritLoc}
+                if {_s} = 2:
+                    draw 8 of dust using dustOption(rgb(255, 150, 50), 1) at {_spiritLoc}
+                if {_s} = 3:
+                    draw 8 of dust using dustOption(rgb(150, 255, 80), 1) at {_spiritLoc}
+                if {_s} = 4:
+                    draw 8 of dust using dustOption(rgb(255, 255, 100), 1) at {_spiritLoc}
+                if {_s} = 5:
+                    draw 8 of dust using dustOption(rgb(80, 200, 120), 1) at {_spiritLoc}
+
+                draw 2 of dust using dustOption(white, 0.5) at {_spiritLoc}
+
+                add 1 to {_s}
+
+            add 1 to {_tick}
+            wait 2 ticks
+        else:
+            stop
+
+function cropGrowth(p: player):
+    while {demeter_active::%uuid of {_p}%} is set:
+        loop blocks in radius {@spirit_range} of {_p}:
+            if loop-block is any of wheat, carrots, potatoes, beetroots, nether wart, cocoa, melon stem, pumpkin stem:
+                set {_age} to random integer between 0 and 3
+                add {_age} to age of loop-block
+        wait {@growth_interval}
+
+function spiritHeal(target: player, caster: player):
+    set {_healTick} to 0
+    set {_maxHealTicks} to 200
+
+    while {_healTick} < {_maxHealTicks}:
+        if {demeter_active::%uuid of {_caster}%} is set:
+            if {_target} is online:
+                heal {_target} by 1
+                draw 6 of dust using dustOption(rgb(100, 255, 100), 1) at location of {_target}
+                send action bar "&a&l✿ &7Being healed by the spirits..." to {_target}
+                add 20 to {_healTick}
+                wait 20 ticks
+            else:
+                stop
+        else:
+            stop
