@@ -6,7 +6,11 @@ execute as @a[predicate=prisma:has_zues_artifact] run effect give @s minecraft:r
 execute as @a[predicate=prisma:has_apollo_artifact] run effect give @s minecraft:fire_resistance 1 0 false
 
 execute as @a[predicate=prisma:has_poseidon_artifact] run effect give @s minecraft:dolphins_grace 1 1 false
-execute as @a[predicate=prisma:has_poseidon_artifact] run effect give @s minecraft:water_breathing 1 0 false
+execute as @a[predicate=prisma:has_poseidon_artifact] run effect give @s minecraft:conduit_power 1 0 false
+
+execute as @a[predicate=prisma:has_demeter_artifact] run effect give @s minecraft:health_boost 1 0 false
+execute as @a[predicate=prisma:has_demeter_artifact] run effect give @s minecraft:luck 1 1 false
+execute as @a[predicate=prisma:has_demeter_artifact] run effect give @s minecraft:regeneration 1 0 false
 
 execute as @a[predicate=prisma:has_hermes_artifact] run effect give @s minecraft:speed 1 1 false
 execute as @a[predicate=prisma:has_hermes_artifact] run effect give @s minecraft:haste 1 0 false
