@@ -24,7 +24,7 @@
             "minecraft:enchantment_glint_override": true,
             "minecraft:custom_model_data": {
                 "strings": [
-                    "zues_artifact"
+                    "zeus_artifact"
                 ]
             }
         }
