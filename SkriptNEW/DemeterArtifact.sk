@@ -9,7 +9,7 @@ on toggle sneak:
     if player is not sneaking:
         stop
 
-    if name of player's offhand tool contains "✿ Demeter Artifact ✿":
+    if name of player's offhand tool contains "✿ Artifact of Demeter ✿":
 
         if {lastSneak_demeter::%uuid of player%} is set:
             if difference between now and {lastSneak_demeter::%uuid of player%} <= 0.5 seconds:
@@ -53,7 +53,7 @@ function demeterSpirits(p: player):
     send action bar "&2&l[&a✿ Demeter ✿&2&l] &7The spirits return to the earth..." to {_p}
 
     set {demeter_cd::%uuid of {_p}%} to true
-    set {_cd_secs} to 5
+    set {_cd_secs} to {@cooldown}
 
     while {_cd_secs} > 0:
         if {demeter_cd::%uuid of {_p}%} is not set:
