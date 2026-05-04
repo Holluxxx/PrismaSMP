@@ -9,7 +9,10 @@
     "key": {
         "A": "minecraft:cactus_flower",
         "B": "minecraft:enchanted_golden_apple",
-        "C": "minecraft:deepslate_emerald_ore"
+        "C": "minecraft:pale_oak_sapling",
+        "C": "minecraft:cherry_sapling",
+        "C": "minecraft:jungle_sapling",
+        "C": "minecraft:spruce_sapling"
     },
     "result": {
         "id": "minecraft:lime_dye",
