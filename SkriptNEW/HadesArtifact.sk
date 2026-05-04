@@ -60,7 +60,7 @@ function summonArmy(p: player):
         heal {_mob}
 
         set {_sword} to netherite sword
-        enchant {_sword} with sharpness 2
+        enchant {_sword} with sharpness 3
         set {_mob}'s tool to {_sword}
 
         set {_helmet} to netherite helmet
@@ -76,7 +76,7 @@ function summonArmy(p: player):
         set {_mob}'s leggings to {_legs}
         set {_mob}'s boots to {_boots}
 
-        apply fire resistance 2 to {_mob} for 99999 seconds
+        apply fire resistance 1 to {_mob} for 99999 seconds
         apply speed 1 to {_mob} for 99999 seconds
         apply strength 1 to {_mob} for 99999 seconds
 
