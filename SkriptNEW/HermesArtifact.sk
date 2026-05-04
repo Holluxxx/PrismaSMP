@@ -28,7 +28,7 @@ function hermesAbility(p: player):
 
     set {hermes_active::%uuid of {_p}%} to true
 
-    apply speed 4 to {_p} for {@ability_duration}
+    apply speed 6 to {_p} for {@ability_duration}
     apply haste 2 to {_p} for {@ability_duration}
 
     loop players in radius {@radius} of {_p}:
