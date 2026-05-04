@@ -25,8 +25,7 @@ function aresRoar(p: player):
         if distance between loop-player and {_p} <= {@sound_range}:
             play sound "entity.warden.roar" at loop-player
 
-    apply strength 3 to {_p} for 15 seconds
-    apply darkness 1 to {_p} for 15 seconds
+    apply strength 4 to {_p} for 15 seconds
     draw 300 of crimson spore at location of {_p}
     draw 1 of explosion emitter at location of {_p}
 
