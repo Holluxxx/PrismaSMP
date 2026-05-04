@@ -2,15 +2,17 @@
     "type": "minecraft:crafting_shaped",
     "category": "misc",
     "pattern": [
-        "ABD",
-        "BCB",
-        "DBA"
+        "FAD",
+        "BHD",
+        "DCA"
     ],
     "key": {
-        "A": "minecraft:heavy_core",
-        "B": "minecraft:netherite_ingot",
-        "C": "minecraft:nether_star",
-        "D": "minecraft:wither_rose"
+        "A": "minecraft:netherite_helmet",
+        "B": "minecraft:netherite_chestplate",
+        "C": "minecraft:netherite_leggings",
+        "D": "minecraft:netherite_boots",
+        "H": "minecraft:heavy_core",
+        "F": "minecraft:fire_charge"
     },
     "result": {
         "id": "minecraft:red_dye",
